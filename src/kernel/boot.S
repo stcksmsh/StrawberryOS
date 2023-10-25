@@ -1,36 +1,28 @@
-.section ".text.boot"
+.section ".text.boot"  // Make sure the linker puts this at the start of the kernel image
 
-.global _start
+.global _start  // Execution starts here
 
 _start:
-    /* 
-    |   This part will turn of all cores that are not core number 0
-    */
-    mrc p15, #0, r1, c0, c0, #5 // fetch current core number to r1?? pretty sure
-    and r1, r1, #3 // make it only show the last two bits (0..3)
-    cmp r1, #0 // is it 0?
-    bne halt // if it is not HALT
+    mrs     x1, mpidr_el1
+    and     x1, x1, #3 // Check processor ID
+    cbz     x1, master // If 0 then it is the master core, so branch to `master`
+    // We're not on the main core, so hang in an infinite wait loop
+hault_core: wfe
+    b       hault_core // infinite loop
+master:  // We're on the main core!
+    // Set stack to start below our code
+    ldr     x1, =_start
+    mov     sp, x0
 
-    mov sp, #0x8000
+    // Clean the BSS section
+    ldr     x1, =__bss_start    // Start address
+    ldr     x2, =__bss_size     // Size of the section
+memzero:  cbz     x2, jumpToMain      // Quit loop if zero
+    str     xzr, [x1], #8
+    sub     x2, x2, #1
+    b memzero
 
-    ldr r4, =__bss_start
-    ldr r9, =__bss_end
-    mov r5, #0
-    mov r6, #0
-    mov r7, #0
-    mov r8, #0
-    b       2f
-
-1:
-    stmia r4!, {r5-r8}
-
-2:
-    cmp r4, r9
-    blo 1b
-
-    ldr r3, =kernel_main
-    blx r3
-
-halt:
-    wfe
-    b halt
+    // Jump to our main() routine in C (make sure it doesn't return)
+jumpToMain:  bl      main
+    // In case it does return, halt the master core too
+    b jumpToMain

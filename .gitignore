@@ -1,0 +1,6 @@
+build/
+*.pdf
+/*.img
+/*.elf
+test/
+.vscode
