@@ -1,4 +1,3 @@
-SRC_DIR = ./src
 BUILD_DIR = ./build
 HEADER_DIR = ./include
 
@@ -8,7 +7,7 @@ KERNEL_ELF = kernel8.elf
 KERNEL_IMG = kernel8.img
 
 # the prefix for all the build tools
-TOOL_PREFIX = aarch64-none-elf-
+TOOL_PREFIX = /usr/local/cross/bin/aarch64-elf-
 
 # the build tools themselves
 AS = ${TOOL_PREFIX}as
@@ -18,69 +17,68 @@ LD = ${TOOL_PREFIX}ld
 OBJCOPY = ${TOOL_PREFIX}objcopy
 OBJDUMP = ${TOOL_PREFIX}objdump
 
-# assemmbly flags
-ASFLAGS =  -Wall -Werror -O2 -ffreestanding
-ASFLAGS += -nostdinc -nostdlib -nostartfiles
-ASFLAGS += -ggdb -fno-common -Iinclude -mgeneral-regs-only
-ASFLAGS += -mtune=cortex-a72
-
-# C flags
+# # C flags
 GCCFLAGS =  -Wall -Werror -O2 -ffreestanding 
 GCCFLAGS += -nostdinc -nostdlib -nostartfiles
-GCCFLAGS += -ggdb -fno-common -Iinclude -mgeneral-regs-only
+GCCFLAGS += -ggdb -fno-common -mgeneral-regs-only
 GCCFLAGS += -mtune=cortex-a72
+GCCFLAGS += -isystem include
 
 # C++ flags
 CXXFLAGS =  -Wall -Werror -O2 -ffreestanding
-CXXFLAGS += -nostdlib --nostdinc -nostartfiles
-CXXFLAGS += -ggdb -fno-common -Iinclude  -mgeneral-regs-only 
-CXXFLAGS += -std=c++11
-CXXFLAGS += -mtune=cortex-a72
+# CXXFLAGS += -nostdlib -ggdb -fno-common 
+CXXFLAGS += -std=c++11 -mtune=cortex-a72
+CXXFLAGS += -isystem include
 
 # linker script and linker flags
-LDSCRIPT = linker.ld
-LDFLAGS = -nostdlib
+LDSCRIPT = boot/linker.ld
+LDFLAGS = -nostdlib -entry=start -T ${LDSCRIPT}
 
 # clean everything and make the image
 all: clean ${KERNEL_IMG}
-
+	@echo "Image created successfully!"
 # remove .img, .elf and all object files
 clean:
-	rm -f ${KERNEL_IMG} ${KERNEL_ELF}
-	rm -fr ${BUILD_DIR}
+	@echo "Cleaning..."
+	@rm -f ${KERNEL_IMG} ${KERNEL_ELF}
+	@rm -fr ${BUILD_DIR}
 
 # make all cpp object files
-${BUILD_DIR}/%.o: ${SRC_DIR}/%.cpp makefile | ${BUILD_DIR}
+${BUILD_DIR}/%.o: %.cpp makefile | ${BUILD_DIR}
 	@mkdir -p $(dir ${@})
-	${CXX} -c $(CXXFLAGS) -MMD -o ${@} ${<}
+	@echo "CXX ${<}..."
+	@${CXX} -c $(CXXFLAGS) -MMD -o ${@} ${<}
 
 # make all c object files
-${BUILD_DIR}/%.o: ${SRC_DIR}/%.c makefile | ${BUILD_DIR}
+${BUILD_DIR}/%.o: m%.c makefile | ${BUILD_DIR}
 	@mkdir -p $(dir ${@})
-	${CC} -c $(GCCFLAGS) -MMD -o ${@} ${<}
+	@echo "CC ${<}..."
+	@${CC} -c $(GCCFLAGS) -MMD -o ${@} ${<}
 
 # make all asm object files
-${BUILD_DIR}/%.o: ${SRC_DIR}/%.S makefile | ${BUILD_DIR}
+${BUILD_DIR}/%.o: %.S makefile | ${BUILD_DIR}
 	@mkdir -p $(dir ${@})
-	${CC} -c $(ASFLAGS) -MMD -o ${@} ${<} 
+	@echo "AS ${<}..."
+	@${CC} -c $(ASFLAGS) -MMD -o ${@} ${<} 
 
 # make the ./build directory if needed
 ${BUILD_DIR}:
-	mkdir ${@}
+	@echo "Creating build directory..."
+	@mkdir ${@}
 
 # initialised as empty
 OBJ_FILES = 
 
 # get all sources, then add their obj files to OBJ_FILES, then vpath
-SOURCES_ASM = $(shell find ./src -name "*.S" -printf "%P ") # find all *.S files
+SOURCES_ASM = $(wildcard boot/*.S kernel/*.S lib/*.S) # find all *.S files
 OBJ_FILES += ${addprefix ${BUILD_DIR}/,${SOURCES_ASM:.S=.o}} # add %.o for each %.S file to OBJ_FILES
 vpath %.S ${sort ${dir ${SOURCES_ASM}}} # if .S is missing, look for it in all subdirectories in SOURCES_ASM, sorted lexicographically
 
-SOURCES_C = $(shell find ./src -name "*.c" -printf "%P ")
+SOURCES_C = $(wildcard boot/*.c kernel/*.c lib/*.c)
 OBJ_FILES += ${addprefix ${BUILD_DIR}/,${SOURCES_C:.c=.o}}
 vpath %.c ${sort ${dir ${SOURCES_C}}}
 
-SOURCES_CPP = $(shell find ./src -name "*.cpp" -printf "%P ")
+SOURCES_CPP = $(wildcard boot/*.cpp kernel/*.cpp lib/*.cpp)
 OBJ_FILES += ${addprefix ${BUILD_DIR}/,${SOURCES_CPP:.cpp=.o}}
 vpath %.cpp ${sort ${dir ${SOURCES_CPP}}}
 
@@ -91,11 +89,18 @@ DEP_FILES = $(OBJ_FILES:%.o=%.d)
 # link all obj to the .elf file with the linker script
 # then copy the objects to the .img file, as the .elf is not for the right architecture
 ${KERNEL_IMG}: ${OBJ_FILES} ${LDSCRIPT} | ${BUILD_DIR}
-	@echo "${OBJ_FILES}"
-	${LD} ${LDFLAGS} -T ${LDSCRIPT} -o ${KERNEL_ELF} ${OBJ_FILES}
-	${OBJCOPY} ${KERNEL_ELF} -O binary ${KERNEL_IMG}
+	@echo "Linking ${KERNEL_ELF}..."
+	@${LD} ${LDFLAGS} -o ${KERNEL_ELF} ${OBJ_FILES}
+	@${OBJCOPY} ${KERNEL_ELF} -O binary ${KERNEL_IMG}
 
 SDCard: all
-	rm -rfd /media/ziltx/bootfs/* /media/ziltx/rootfs/*
-	cp kernel8.img ./SDCard
-	cp ./SDCard/* /media/ziltx/bootfs/
+	@echo "Copying to directory SDCard..."
+	@cp boot/config.txt ./SDCard
+	@rm -rfd /media/ziltx/bootfs/* /media/ziltx/rootfs/*
+	@cp kernel8.img ./SDCard
+	@echo "Copying contents of SDCard to /media/ziltx/bootfs..."
+	@rm -rfd /media/ziltx/bootfs/*
+	@cp ./SDCard/* /media/ziltx/bootfs/
+	@echo "Unmounting /media/ziltx/bootfs and /media/ziltx/rootfs..."
+	@umount /media/ziltx/bootfs /media/ziltx/rootfs
+	@echo "SDCard ready to be used!"
