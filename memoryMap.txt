@@ -1,0 +1,46 @@
+------------------------------------------------------------------------------
+Base		Size		Contents		Remarks
+------------------------------------------------------------------------------
+00000000	256 Bytes	ARM stub		Core 1-3 spin here	
+
+00000100	variable	ATAGS			unused
+...
+0006F000	4 KByte		EL3 stack
+00070000	2 KByte		Exception vector table EL3
+...
+00080000	max. 2 MByte	Kernel image
+				 .boot			startup code
+				 .text
+				 .rodata
+                 /* Currently no support for any of this
+				 .init_array		static constructors 
+				 .ARM.exidx		unused
+				 .eh_frame		C++ exception frames
+                 */
+				 .data
+				 .bss
+...
+				Kernel stacks
+00280000	128 KByte	 for Core 0
+002A0000	128 KByte	 for Core 1		may be unused
+002C0000	128 KByte	 for Core 2		may be unused
+002E0000	128 KByte	 for Core 3		may be unused
+
+				Exception stacks
+00300000	32 KByte	 for Core 0
+00308000	32 KByte	 for Core 1		may be unused
+00310000	32 KByte	 for Core 2		may be unused
+00318000	32 KByte	 for Core 3		may be unused
+
+00500000	4 MByte		Coherent region		for property mailbox, VCHIQ, xHCI
+00900000	variable	Heap allocator		"new" and malloc()
+????????	16 MByte	Page allocator		palloc()
+
+????????	variable	GPU memory
+40000000	variable	High heap allocator	unused above 0xC0000000
+...
+FC000000	64 MByte	Peripherals
+...
+600000000	64 MByte	xHCI controller
+...
+------------------------------------------------------------------------------

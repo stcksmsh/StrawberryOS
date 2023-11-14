@@ -1,5 +1,5 @@
 #include "kernel.h"
-#include <miniUART.h>
+#include <miniUart.h>
 
 void Kernel::init()
 {
