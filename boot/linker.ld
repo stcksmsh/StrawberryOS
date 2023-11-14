@@ -1,7 +1,6 @@
 ENTRY(.start)
 SECTIONS
 {
-    . = 0x80000;
     .text BLOCK(4k) : ALIGN(4k){
         *(.boot)
         *(.text)

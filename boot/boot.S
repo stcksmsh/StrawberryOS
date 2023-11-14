@@ -10,7 +10,12 @@ hault_core: wfe
 master_core:  // We're on the main core!
     // Set stack to start below our code
     ldr     x1, =_start
-    mov     sp, x0
+    mov     sp, x1
+
+    // Set the vector tables for EL1 and EL2
+    ldr	x0, =VectorTable
+    msr vbar_el1, x0
+    msr vbar_el2, x0
 
     // Clean the BSS section
     ldr     x1, =__bss_start    // Start address
