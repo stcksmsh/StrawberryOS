@@ -2,33 +2,33 @@
 
 void pinSet(uint8_t pin){
     uint64_t reg = 0;
-    if(pin <= 31) reg = GPSET0;
-    else reg = GPSET1;
+    if(pin <= 31) reg = ARM_GPIO_GPSET0;
+    else reg = ARM_GPIO_GPSET1;
     regSet(reg, 0b1, 1, pin%32);
 }
 
 void pinClear(uint8_t pin){
     uint64_t reg = 0;
-    if(pin <= 31) reg = GPCLR0;
-    else reg = GPCLR1;
+    if(pin <= 31) reg = ARM_GPIO_GPCLR0;
+    else reg = ARM_GPIO_GPCLR1;
     regSet(reg, 0b1, 1, pin%32);
 }
 
 int pinRead(uint8_t pin){
     uint64_t reg = 0;
-    if(pin <= 31) reg = GPLEV0;
-    else reg = GPLEV1;
+    if(pin <= 31) reg = ARM_GPIO_GPLEV0;
+    else reg = ARM_GPIO_GPLEV1;
     uint32_t val = mmioRead(reg);
     val = setMask(val, 0b1, 1, pin%32);
     return val;
 }
 
 void pinMode(uint8_t pin, GPIO_MODE mode){
-    uint64_t reg = GPFSEL0 + 0x04 * (pin / 10);
+    uint64_t reg = ARM_GPIO_GPFSEL0 + 0x04 * (pin / 10);
     regSet(reg, mode, 3, pin%10);
 }
 
 void pinPull(uint8_t pin, GPIO_PULL pull){
-   uint64_t reg = GPIO_PUP_PDN_CNTRL_REG0 + 0x4 * (pin / 16);
+   uint64_t reg = ARM_GPIO_GPIO_PUPDNN0 + 0x4 * (pin / 16);
    regSet(reg, pull, 2, pin%16);
 }
