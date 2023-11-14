@@ -1,43 +1,9 @@
-#ifndef GPIO_HEADERFILE
-#define GPIO_HEADERFILE
+#ifndef GPIO_H
+#define GPIO_H
 
+#include <bcm2711.h>
 #include <stdint.h>
 #include <mmio.h>
-
-/// @brief Specifies the BASE address for GPIO pin registers, as well as their respective offsets
-typedef enum{
-    GPIO_BASE = 0xFE200000,
-    GPFSEL0 = GPIO_BASE + 0x00,
-    GPFSEL1 = GPIO_BASE + 0x04,
-    GPFSEL2 = GPIO_BASE + 0x08,
-    GPFSEL3 = GPIO_BASE + 0x0c,
-    GPFSEL4 = GPIO_BASE + 0x10,
-    GPFSEL5 = GPIO_BASE + 0x14,
-    GPSET0 = GPIO_BASE + 0x1c,
-    GPSET1 = GPIO_BASE + 0x20,
-    GPCLR0 = GPIO_BASE + 0x28,
-    GPCLR1 = GPIO_BASE + 0x2c,
-    GPLEV0 = GPIO_BASE + 0x34,
-    GPLEV1 = GPIO_BASE + 0x38,
-    GPEDS0 = GPIO_BASE + 0x40,
-    GPEDS1 = GPIO_BASE + 0x44,
-    GPREN0 = GPIO_BASE + 0x4c,
-    GPREN1 = GPIO_BASE + 0x50,
-    GPFEN0 = GPIO_BASE + 0x58,
-    GPFEN1 = GPIO_BASE + 0x5c,
-    GPHEN0 = GPIO_BASE + 0x64,
-    GPHEN1 = GPIO_BASE + 0x68,
-    GPLEN0 = GPIO_BASE + 0x70,
-    GPLEN1 = GPIO_BASE + 0x74,
-    GPAREN0 = GPIO_BASE + 0x7c,
-    GPAREN1 = GPIO_BASE + 0x80,
-    GPAFEN0 = GPIO_BASE + 0x88,
-    GPAFEN1 = GPIO_BASE + 0x8c,
-    GPIO_PUP_PDN_CNTRL_REG0 = GPIO_BASE + 0xe4,
-    GPIO_PUP_PDN_CNTRL_REG1 = GPIO_BASE + 0xe8,
-    GPIO_PUP_PDN_CNTRL_REG2 = GPIO_BASE + 0xec,
-    GPIO_PUP_PDN_CNTRL_REG3 = GPIO_BASE + 0xf0
-}  GPIO_REG;
 
 /// @brief Specifies the 7 different modes a GPIO pin can be in
 typedef enum{
@@ -70,7 +36,7 @@ void pinMode(uint8_t pin, GPIO_MODE mode);
 
 /// @brief Sets the specified pin
 /// @param pin the pin to set [0..57]
-void pinSet(uint8_t pin);
+void pinSet(int pin);
 
 /// @brief Clears the specified pin
 /// @param pin the pin to clear [0..57]]
