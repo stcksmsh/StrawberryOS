@@ -108,6 +108,10 @@ _start:
 	mov x0, #0x33ff
 	msr CPTR_EL3, x0
 
+	/* Set up SCR */
+	; mov x0, #SCR_VAL
+	; msr SCR_EL3, x0
+
     /* Set up secure monitor entry and stack */
 	mov x0, #VECTOR_TABLE_EL3
 	msr VBAR_EL3, x0
@@ -121,7 +125,21 @@ _start:
         bl      setup_gic
 #endif
 	
+	/*
+	 * Set up SCTLR_EL2
+	 * All set bits below are res1. LE, no WXN/I/SA/C/A/M
+	 */
+	ldr x0, =0x30c50830
+	msr SCTLR_EL2, x0
 
+	/* Switch to EL2 */
+	mov x0, #SPSR_EL3_VAL
+	msr spsr_el3, x0
+	adr x0, in_el2
+	msr elr_el3, x0
+	eret
+
+in_el2:	
 	mrs x6, MPIDR_EL1
 	and x6, x6, #0x3
 	cbz x6, primary_cpu

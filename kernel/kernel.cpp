@@ -5,16 +5,13 @@ void Kernel::init()
 {
     MiniUART uart = MiniUART();
     uart.init();
-
-    timer_init();
-
-    uart.putChar('0');
+    
+    int lvl = 0;
+    __asm__ volatile("mrs %0, CurrentEL" : "=r"(lvl));
+    lvl >>= 2;
+    uart.putChar('0' + lvl);
 
     uart << (char*)"Hello World!\n";
 
-    // int j = 0;
-    while (1){
-        uart.update();
-        // uart.putChar('0' + j + cnt);
-    }
+    while (1)uart.update();
 }

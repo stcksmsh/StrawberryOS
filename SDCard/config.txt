@@ -6,3 +6,4 @@ core_freq_min=500
 arm_64bit=1
 kernel=kernel8.img
 kernel_old = 1
+armstub=armstub8.bin

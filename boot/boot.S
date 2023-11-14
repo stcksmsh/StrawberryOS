@@ -1,33 +1,77 @@
+#include <sysconfig.h>
+
+/* Taken from U-Boot, defined in arch/arm/include/asm/macro.h */
+.macro armv8_switch_to_el1_m, xreg1, xreg2
+
+	/* Initialize Generic Timers */
+	mrs	\xreg1, cnthctl_el2
+	orr	\xreg1, \xreg1, #0x3	/* Enable EL1 access to timers */
+	msr	cnthctl_el2, \xreg1
+	msr	cntvoff_el2, xzr
+
+	/* Initilize MPID/MPIDR registers */
+	mrs	\xreg1, midr_el1
+	mrs	\xreg2, mpidr_el1
+	msr	vpidr_el2, \xreg1
+	msr	vmpidr_el2, \xreg2
+
+	/* Disable coprocessor traps */
+	mov	\xreg1, #0x33ff
+	msr	cptr_el2, \xreg1	/* Disable coprocessor traps to EL2 */
+	msr	hstr_el2, xzr		/* Disable coprocessor traps to EL2 */
+	mov	\xreg1, #3 << 20
+	msr	cpacr_el1, \xreg1	/* Enable FP/SIMD at EL1 */
+
+	/* Initialize HCR_EL2 */
+	mov	\xreg1, #(1 << 31)		/* 64bit EL1 */
+	msr	hcr_el2, \xreg1
+
+	/* SCTLR_EL1 initialization
+	 *
+	 * setting RES1 bits (29,28,23,22,20,11) to 1
+	 * and RES0 bits (31,30,27,21,17,13,10,6) +
+	 * UCI,EE,EOE,WXN,nTWE,nTWI,UCT,DZE,I,UMA,SED,ITD,
+	 * CP15BEN,SA0,SA,C,A,M to 0
+	 */
+	mov	\xreg1, #0x0800
+	movk	\xreg1, #0x30d0, lsl #16
+	msr	sctlr_el1, \xreg1
+
+	/* Return to the EL1_SP1 mode from EL2 */
+	mov	\xreg1, #0x3c4
+	msr	spsr_el2, \xreg1	/* EL1_SP0 | D | A | I | F */
+	adr	\xreg1, 1f
+	msr	elr_el2, \xreg1
+	eret
+1:
+
+	.endm
+
 .section .boot  // Make sure the linker puts this at the start of the kernel image
 .global _start
 _start:
-    mrs     x1, mpidr_el1 // Read the Multiprocessor Affinity Register
-    and     x1, x1, #3 // Check processor ID
-    cbz     x1, master_core // If 0 then it is the master core, so branch to `master_core`
-    // We're not on the main core, so hang in an infinite wait loop
-hault_core: wfe
-    b       hault_core // infinite loop
-master_core:  // We're on the main core!
-    // Set stack to start below our code
-    ldr     x1, =_start
-    mov     sp, x1
+    mrs	x2, mpidr_el1		/* read affinity */
+	and	x2, x2, #CORES-1	/* get CPU ID */
 
-    // Set the vector tables for EL1 and EL2
-    ldr	x0, =VectorTable
-    msr vbar_el1, x0
-    msr vbar_el2, x0
+	mrs	x0, CurrentEL		/* check if already in EL1t mode? */
+	cmp	x0, #4
+	beq	1f
 
-    // Clean the BSS section
-    ldr     x1, =__bss_start    // Start address
-    ldr     x2, =__bss_size     // Size of the section
-memzero:
-    cbz     x2, jumpToMain      // Quit loop if zero
-    str     xzr, [x1], #8    // Write zero to memory and decrement size
-    sub     x2, x2, #1
-    b memzero // Loop
+	mov	x1, #EXCEPTION_STACK_SIZE /* calculate exception stack offset for core */
+	mul	x1, x1, x2
+	ldr	x0, =MEM_EXCEPTION_STACK /* IRQ, FIQ and exception handler run in EL1h */
+	add	x0, x0, x1
+	msr	sp_el1, x0		/* init their stack */
 
-    // Jump to our main() routine in C (make sure it doesn't return)
-jumpToMain:  
-    bl    _ZN6Kernel4initEv // Call the init() function in the Kernel class
-    // In case it does return, halt the master core too
-    b hault_core 
+	armv8_switch_to_el1_m x0, x1
+
+1:	mov	x1, #KERNEL_STACK_SIZE	/* calculate kernel stack offset for core */
+	mul	x1, x1, x2
+	ldr	x0, =MEM_KERNEL_STACK	/* main thread runs in EL1t and uses sp_el0 */
+	add	x0, x0, x1
+	mov	sp, x0			/* init its stack */
+
+	ldr	x0, =VectorTable	/* init exception vector table */
+	msr	vbar_el1, x0
+
+	b	MAINPROC

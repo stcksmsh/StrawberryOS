@@ -23,7 +23,7 @@ SECTIONS
 		KEEP(*(.init_array*))
 
 		__init_end = .;
-	}
+	} > RAM
     . = ALIGN(4k);
 
     .ARM.exidx : {
@@ -32,12 +32,12 @@ SECTIONS
 		*(.ARM.exidx*)
 
 		__exidx_end = .;
-	}
+	} > RAM
     . = ALIGN(4k);
 
     .eh_frame : {
 		*(.eh_frame*)
-	}
+	} > RAM
     .data : {
         *(.data*)
     } > RAM
