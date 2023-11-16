@@ -9,9 +9,8 @@ void Kernel::init()
     int lvl = 0;
     __asm__ volatile("mrs %0, CurrentEL" : "=r"(lvl));
     lvl >>= 2;
+    uart << (char*)"Welcome, current privilege level: EL";
     uart.putChar('0' + lvl);
-
-    uart << (char*)"Hello World!\n";
 
     while (1)uart.update();
 }
