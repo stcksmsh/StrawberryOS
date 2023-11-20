@@ -71,7 +71,8 @@ CRTBEGIN = ${CRT_PREFIX}/crtbegin.o
 CRTEND = ${CRT_PREFIX}/crtend.o
 CRTN = ${CRT_PREFIX}/crtn.o
 
-LINK_LIST = ${CRTI} ${CRTBEGIN} ${OBJ_FILES} ${CRTEND} ${CRTN}
+LINK_LIST = ${CRTI} ${OBJ_FILES} ${CRTN}
+
 
 # clean everything and make the image
 all: clean ${KERNEL_IMG} ${ARMSTUB_BIN}
