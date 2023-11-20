@@ -19,7 +19,8 @@ ARMSTUB_S = ${ARMSTUB}.S
 ARMSTUB_OBJ = ${ARMSTUB}.o
 
 # the prefix for all the build tools
-TOOL_PREFIX = /usr/local/cross/bin/aarch64-elf-
+PREFIX = /usr/local/cross
+TOOL_PREFIX = ${PREFIX}/bin/aarch64-elf-
 
 # the build tools themselves
 CC = ${TOOL_PREFIX}gcc
@@ -31,25 +32,46 @@ OBJCOPY = ${TOOL_PREFIX}objcopy
 OBJDUMP = ${TOOL_PREFIX}objdump
 READELF = ${TOOL_PREFIX}readelf
 
+# # # C flags
+# GCCFLAGS =  -Wall -Werror -O2 -ffreestanding 
+# GCCFLAGS += -nostdinc -nostdlib -nostartfiles
+# GCCFLAGS += -ggdb -fno-common -mgeneral-regs-only
+# GCCFLAGS += -mtune=cortex-a72 -fstack-protector
+# GCCFLAGS += -isystem include
+
+# # C++ flags
+# CXXFLAGS =  -Wall -Werror -O2 -ffreestanding
+# CXXFLAGS += -nostdlib -ggdb -fno-common 
+# CXXFLAGS += -mtune=cortex-a72 -fstack-protector
+# CXXFLAGS += -std=c++11 
+# CXXFLAGS += -isystem include
+
 # # C flags
 GCCFLAGS =  -Wall -Werror -O2 -ffreestanding 
-GCCFLAGS += -nostdinc -nostdlib -nostartfiles
 GCCFLAGS += -ggdb -fno-common -mgeneral-regs-only
-GCCFLAGS += -mtune=cortex-a72
+GCCFLAGS += -mtune=cortex-a72 -fstack-protector
 GCCFLAGS += -isystem include
 
 # C++ flags
-CXXFLAGS =  -Wall -Werror -O2 -ffreestanding
-# CXXFLAGS += -nostdlib -ggdb -fno-common 
-CXXFLAGS += -std=c++11 -mtune=cortex-a72
-CXXFLAGS += -isystem include
+CXXFLAGS =  ${GCCFLAGS} -std=c++11 -fno-exceptions -fno-rtti
+CXXFLAGS += -nostdinc++
+
 
 # AS FLAGS
 ASFLAGS = ${GCCFLAGS}
 
 # linker script and linker flags
 LDSCRIPT = boot/linker.ld
-LDFLAGS = -nostdlib -T ${LDSCRIPT} 
+LDFLAGS = -nostdlib -T ${LDSCRIPT}  -O2
+# LDFLAGS = -T ${LDSCRIPT} -ffreestanding -O2 -nostdlib  -lgcc
+
+CRT_PREFIX = ${PREFIX}/lib/gcc/aarch64-elf/13.2.0
+CRTI = ${CRT_PREFIX}/crti.o
+CRTBEGIN = ${CRT_PREFIX}/crtbegin.o
+CRTEND = ${CRT_PREFIX}/crtend.o
+CRTN = ${CRT_PREFIX}/crtn.o
+
+LINK_LIST = ${CRTI} ${CRTBEGIN} ${OBJ_FILES} ${CRTEND} ${CRTN}
 
 # clean everything and make the image
 all: clean ${KERNEL_IMG} ${ARMSTUB_BIN}
@@ -89,15 +111,15 @@ ${BUILD_DIR}:
 OBJ_FILES = 
 
 # get all sources, then add their obj files to OBJ_FILES, then vpath
-SOURCES_ASM = $(wildcard boot/boot.S kernel/*.S lib/*.S) # find all *.S files
+SOURCES_ASM = $(wildcard kernel/*.S lib/*.S) # find all *.S files
 OBJ_FILES += ${addprefix ${BUILD_DIR}/,${SOURCES_ASM:.S=.o}} # add %.o for each %.S file to OBJ_FILES
 vpath %.S ${sort ${dir ${SOURCES_ASM}}} # if .S is missing, look for it in all subdirectories in SOURCES_ASM, sorted lexicographically
 
-SOURCES_C = $(wildcard boot/*.c kernel/*.c lib/*.c)
+SOURCES_C = $(wildcard kernel/*.c lib/*.c)
 OBJ_FILES += ${addprefix ${BUILD_DIR}/,${SOURCES_C:.c=.o}}
 vpath %.c ${sort ${dir ${SOURCES_C}}}
 
-SOURCES_CPP = $(wildcard boot/*.cpp kernel/*.cpp lib/*.cpp)
+SOURCES_CPP = $(wildcard kernel/*.cpp lib/*.cpp)
 OBJ_FILES += ${addprefix ${BUILD_DIR}/,${SOURCES_CPP:.cpp=.o}}
 vpath %.cpp ${sort ${dir ${SOURCES_CPP}}}
 
@@ -116,7 +138,7 @@ ${ARMSTUB_BIN}: ${ARMSTUB_S}
 # then copy the objects to the .img file, as the .elf is not for the right architecture
 ${KERNEL_ELF}: ${OBJ_FILES} ${LDSCRIPT} | ${BUILD_DIR}
 	@echo "LD ${<}..."
-	@${LD} ${LDFLAGS} -o ${KERNEL_ELF} ${OBJ_FILES}
+	@${LD} ${LDFLAGS} -o ${KERNEL_ELF} ${LINK_LIST}
 	@${OBJDUMP} -D ${KERNEL_ELF} > ${KERNEL_LST}
 
 ${KERNEL_IMG}: ${KERNEL_ELF}

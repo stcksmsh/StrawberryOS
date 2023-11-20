@@ -3,7 +3,7 @@
 
 class Kernel{
 private:
-    void init();
+    int init();
 public:
 };
 

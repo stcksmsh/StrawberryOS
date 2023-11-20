@@ -1,11 +1,11 @@
 #include "kernel.h"
 #include <miniUart.h>
 
-void Kernel::init()
+int Kernel::init()
 {
     MiniUART uart = MiniUART();
     uart.init();
-    
+
     int lvl = 0;
     __asm__ volatile("mrs %0, CurrentEL" : "=r"(lvl));
     lvl >>= 2;
@@ -13,4 +13,5 @@ void Kernel::init()
     uart.putChar('0' + lvl);
 
     while (1)uart.update();
+    return 1;
 }

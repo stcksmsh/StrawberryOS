@@ -18,7 +18,8 @@
 #endif
 
 #ifndef MAINPROC
-#define MAINPROC _ZN6Kernel4initEv
+// #define MAINPROC _ZN6Kernel4initEv
+#define MAINPROC Kernel::init
 #endif
 
 #ifndef CORES
