@@ -1,7 +1,7 @@
-#include <sysconfig.h>
+#include <sysconfig.hpp>
 #include <stdint.h>
-#include <util.h>
-#include <miniUart.h>
+#include <util.hpp>
+#include <miniUart.hpp>
 
 void sysinit(){
     // __asm__ volatile (" cpsie i"); // Enable IRQs 

@@ -1,4 +1,4 @@
-#include <mmio.h>
+#include <mmio.hpp>
 
 void mmioWrite(uint64_t reg, uint32_t val){
     *(volatile uint32_t*)reg = val;

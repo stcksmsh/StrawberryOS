@@ -1,6 +1,6 @@
-#include <sysconfig.h>
+#include <sysconfig.hpp>
 
-/* Taken from U-Boot, defined in arch/arm/include/asm/macro.h */
+/* Taken from U-Boot, defined in arch/arm/include/asm/macro.hpp */
 .macro armv8_switch_to_el1_m, xreg1, xreg2
 
 		/* Initialize Generic Timers */

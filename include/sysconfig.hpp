@@ -30,6 +30,6 @@
 #define EXCEPTION_STACK_SIZE 32 * KLOBYTE
 #endif
 
-#include <memorymap.h>
+#include <memorymap.hpp>
 
 #endif
