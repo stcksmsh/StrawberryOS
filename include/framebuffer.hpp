@@ -2,7 +2,7 @@
 #define FRAMEBUFFER_HPP
 
 #include <mailbox.hpp>
-#include <stdint.h>
+#include <types.hpp>
 
 class FrameBuffer {
 public:

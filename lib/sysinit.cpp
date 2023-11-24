@@ -1,5 +1,5 @@
 #include <sysconfig.hpp>
-#include <stdint.h>
+#include <types.hpp>
 #include <util.hpp>
 #include <miniUart.hpp>
 

@@ -48,7 +48,7 @@ READELF = ${TOOL_PREFIX}readelf
 
 # # # C flags
 GCCFLAGS =  -Wall -Werror -O2 -nostdlib
-GCCFLAGS += -ffreestanding -nostartfiles 
+GCCFLAGS += -ffreestanding -nostartfiles
 GCCFLAGS += -ggdb -fno-common -mgeneral-regs-only
 GCCFLAGS += -mtune=cortex-a72 -fstack-protector
 GCCFLAGS += -isystem include

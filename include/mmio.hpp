@@ -1,7 +1,7 @@
 #ifndef MMIO_HPP
 #define MMIO_HPP
 
-#include <stdint.h>
+#include <types.hpp>
 
 /// @brief writes to the MMIO register
 /// @param reg the address of the register
