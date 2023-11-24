@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="fs">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/GCC_Cross-Compiler/gcc-13.2.0/libgo/go/html/template/testdata/fs.zip!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

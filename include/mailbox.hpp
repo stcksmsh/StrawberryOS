@@ -1,5 +1,5 @@
-#ifndef MBOX_H
-#define MBOX_H
+#ifndef MBOX_HPP
+#define MBOX_HPP
 
 #include <bcm2711.hpp>
 #include <mmio.hpp>
@@ -32,22 +32,45 @@ private:
 /*
  *  Channels
  */
-
-#define MBOX_CHANNEL_ARM_TO_VC 0x00000008
-#define MBOX_CHANNEL_VC_TO_ARM 0x00000009
+#define MBOX_CH_POWER 0x00000000
+#define MBOX_CH_FRAMEBUFFER 0x00000001 /// deprecated
+#define MBOX_CH_VIRT_UART 0x00000002
+#define MBOX_CH_VCHIQ 0x00000003
+#define MBOX_CH_LEDs 0x00000004
+#define MBOX_CH_BUTTONS 0x00000005
+#define MBOX_CH_TOUCH_SCREEN 0x00000006
+#define MBOX_CH_UNKNOWN 0x00000007
+#define MBOX_CH_ARM_TO_VC 0x00000008 /// this one is probably all I will ever use
+#define MBOX_CH_VC_TO_ARM 0x00000009
 
 
 /*
  *  Tags
+ *  for channels 8 and 9
  */
 
 #define MBOX_TAG_END 0x00000000
 
 /*
+ *  Hardware tags
+ */
+
+#define MBOX_TAG_GET_BOARD_MODEL 0x00010001
+#define MBOX_TAG_GET_BOARD_REVISION 0x00010002
+#define MBOX_TAG_GET_BOARD_MAC 0x00010003
+#define MBOX_TAG_GET_BOARD_SERIAL 0x00010004
+#define MBOX_TAG_GET_ARM_MEMORY 0x00010005
+#define MBOX_TAG_GET_VC_MEMORY 0x00010006
+#define MBOX_TAG_GET_CLOCKS 0x00010007
+
+
+/*
  *  LED tags
  */
+
 #define MBOX_STATUS_LED_PIN 42
-#define MBOX_POWER_LED_PIN 130 // the on and off values seem to be flipped???
+#define MBOX_POWER_LED_PIN 130 
+// the on and off values for the PWR led seem to be flipped???
 /// 0x00000000 turns it on and 0xffffffff turns it off?? further investigation required
 
 #define MBOX_TAG_SET_LED  0x00038041

@@ -14,6 +14,13 @@ public:
     
     void print(char*);
 
+    void print(int);
+
+    void printBinary(uint64_t);
+
+    void printHex(uint64_t);
+    // void print(double, int = 6);
+
     void println(char*);
 
     char readChar();
@@ -22,7 +29,11 @@ public:
 
     void update();
 
+
     MiniUART& operator<<(char*);
+
+    MiniUART& operator<<(int);
+
 private:
 
     uint8_t RX, TX;

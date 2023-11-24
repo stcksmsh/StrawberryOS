@@ -147,6 +147,11 @@
 //
 #define MAILBOX_BASE		(ARM_IO_BASE + 0xB880)
 
+#define MAILBOX_OFFSET  0x20
+#define MAILBOX_READ_OFFSET 0x00
+#define MAILBOX_POLL_OFFSET 0x10
+#define MAILBOX_
+
 #define MAILBOX0_READ  		(MAILBOX_BASE + 0x00)
 #define MAILBOX0_POLL		(MAILBOX_BASE + 0x10)
 #define MAILBOX0_SENDER		(MAILBOX_BASE + 0x14)
@@ -160,8 +165,8 @@
 #define MAILBOX1_CONFIG 	(MAILBOX_BASE + 0x1C)
 #define MAILBOX1_WRITE		(MAILBOX_BASE + 0x20)
 
-#define MAILBOX_CHANNEL_PM	0			// power management
-#define MAILBOX_CHANNEL_FB 	1			// frame buffer
+#define MAILBOX_CH_PM	0			// power management
+#define MAILBOX_CH_FB 	1			// frame buffer
 #define BCM_MAILBOX_PROP_OUT	8			// property tags (ARM to VC)
 
 //

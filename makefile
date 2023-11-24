@@ -32,7 +32,7 @@ OBJCOPY = ${TOOL_PREFIX}objcopy
 OBJDUMP = ${TOOL_PREFIX}objdump
 READELF = ${TOOL_PREFIX}readelf
 
-# # # C flags
+# # C flags
 # GCCFLAGS =  -Wall -Werror -O2 -ffreestanding 
 # GCCFLAGS += -nostdinc -nostdlib -nostartfiles
 # GCCFLAGS += -ggdb -fno-common -mgeneral-regs-only
@@ -46,8 +46,9 @@ READELF = ${TOOL_PREFIX}readelf
 # CXXFLAGS += -std=c++11 
 # CXXFLAGS += -isystem include
 
-# # C flags
-GCCFLAGS =  -Wall -Werror -O2 -ffreestanding 
+# # # C flags
+GCCFLAGS =  -Wall -Werror -O2 -nostdlib
+GCCFLAGS += -ffreestanding -nostartfiles 
 GCCFLAGS += -ggdb -fno-common -mgeneral-regs-only
 GCCFLAGS += -mtune=cortex-a72 -fstack-protector
 GCCFLAGS += -isystem include
@@ -159,6 +160,5 @@ SDCard: all
 	@rm -rfd /media/ziltx/bootfs/*
 	@cp ./SDCard/* /media/ziltx/bootfs/
 	@echo "Unmounting /media/ziltx/bootfs and /media/ziltx/rootfs..."
-	@umount /media/ziltx/bootfs && umount /media/ziltx/rootfs
 	@umount /media/ziltx/bootfs && umount /media/ziltx/rootfs
 	@echo "SDCard ready to be used!"

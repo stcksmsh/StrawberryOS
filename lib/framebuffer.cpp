@@ -49,22 +49,22 @@ FrameBuffer::FrameBuffer(uint32_t width, uint32_t height, uint32_t depth)
 
         m_mailbox.writeBuff(34, MBOX_TAG_END); /// end of tags
 
-    if(m_mailbox.call(MBOX_CHANNEL_ARM_TO_VC) && m_mailbox.readBuff(20) == 32 && m_mailbox.readBuff(28) != 0){
+    if(m_mailbox.call(MBOX_CH_ARM_TO_VC) && m_mailbox.readBuff(20) == 32 && m_mailbox.readBuff(28) != 0){
+        m_width = m_mailbox.readBuff(10);
+        m_height = m_mailbox.readBuff(11);
         m_pitch = m_mailbox.readBuff(33);
         m_buffer = (uint32_t*)((uint64_t)m_mailbox.readBuff(28) & 0x3FFFFFFF);
     }
 
 }
 
-FrameBuffer::~FrameBuffer()
-{
-}
+FrameBuffer::~FrameBuffer(){}
 
 void FrameBuffer::clear()
 {
-    uint32_t pixels = m_width * m_height;
-    for (uint32_t i = 0; i < pixels; i++)
-    {
-        m_buffer[i] = 0;
+    for(uint32_t x = 0; x < m_width; x++){
+        for(uint32_t y = 0; y < m_height; y++){
+            m_buffer[x * 4 + y * m_pitch] = 0x0000AA00;
+        }
     }
 }

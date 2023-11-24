@@ -1,5 +1,5 @@
-#ifndef MMIO_HEADRFILE
-#define MMIO_H
+#ifndef MMIO_HPP
+#define MMIO_HPP
 
 #include <stdint.h>
 

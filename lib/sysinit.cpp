@@ -19,7 +19,7 @@ void sysinit(){
         (**pFunc)();    
 
 
-    asm volatile("b _ZN6Kernel4initEv"); // Call Kernel::init()
+    asm volatile("b _ZN6Kernel4initEv");
     int exitValue = 0;
     asm volatile ("mov %0, x0" : "=r"(exitValue));
     MiniUART uart = MiniUART();

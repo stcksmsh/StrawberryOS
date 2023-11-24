@@ -17,11 +17,6 @@
 #define KERNEL_STACK_SIZE	128 * KLOBYTE
 #endif
 
-#ifndef MAINPROC
-// #define MAINPROC _ZN6Kernel4initEv
-#define MAINPROC Kernel::init
-#endif
-
 #ifndef CORES
 #define CORES 4
 #endif

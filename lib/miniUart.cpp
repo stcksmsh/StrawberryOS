@@ -40,6 +40,7 @@ void MiniUART::init(){
 void MiniUART::putChar(char ch){
     while(!isWriteByteReady());
     mmioWrite(ARM_AUX_MU_IO_REG, (uint32_t)ch);
+    if(ch == '\n')putChar('\r');
 }
 
 void MiniUART::print(char* buff){
@@ -48,6 +49,63 @@ void MiniUART::print(char* buff){
         putChar(*buff++);
     }
 }
+
+void MiniUART::print(int n){
+    int zeroCnt = 0;
+    int rev = 0;
+    if(n < 0){
+        putChar('-');
+        n = - n;
+    }
+    while(n % 10 == 0 && n > 0){
+        zeroCnt ++;
+        n /= 10;
+    }
+    while(n > 0){
+        rev = rev * 10 + n % 10;
+        n /= 10;
+    }
+    do{
+        putChar('0' + rev%10);
+        rev /= 10;
+    }while(rev > 0);
+    while(zeroCnt > 0){
+        putChar('0');
+        zeroCnt --;
+    }
+}
+
+void MiniUART::printBinary(uint64_t n){
+    for(int i = 64; i >= 0; i--){
+        if(n & (1 << i))putChar('1');
+        else putChar('0');
+    }
+}
+
+void MiniUART::printHex(uint64_t n){
+    for(int i = 15; i >= 0; i--){
+        int val = (n >> (i * 4)) & 0xF;
+        switch(val){
+            case 0: putChar('0'); break;
+            case 1: putChar('1'); break;
+            case 2: putChar('2'); break;
+            case 3: putChar('3'); break;
+            case 4: putChar('4'); break;
+            case 5: putChar('5'); break;
+            case 6: putChar('6'); break;
+            case 7: putChar('7'); break;
+            case 8: putChar('8'); break;
+            case 9: putChar('9'); break;
+            case 10: putChar('A'); break;
+            case 11: putChar('B'); break;
+            case 12: putChar('C'); break;
+            case 13: putChar('D'); break;
+            case 14: putChar('E'); break;
+            case 15: putChar('F'); break;
+        }
+    }
+}
+
 
 void MiniUART::println(char* buff){
     print(buff);
@@ -71,20 +129,6 @@ char MiniUART::readChar() {
 //     return buff;
 // }
 
-uint32_t MiniUART::isReadByteReady()  {
-    return mmioRead(ARM_AUX_MU_LSR_REG) & 0x01;
-}
-
-uint32_t MiniUART::isWriteByteReady(){
-    /// we read the 5th bit of ARM_AUX_MU_LSR_REG
-    return mmioRead(ARM_AUX_MU_LSR_REG) & 0x20;
-}
-
-MiniUART& MiniUART::operator<<(char* buff){
-    print(buff);
-    return *this;
-}
-
 void MiniUART::update(){
     loadOutputQueue();
     if (isReadByteReady()) {
@@ -94,9 +138,6 @@ void MiniUART::update(){
     }
 }
 
-uint32_t MiniUART::isOutputQueueEmpty() {
-    return MiniUART_output_queue_read == MiniUART_output_queue_write;
-}
 
 void MiniUART::loadOutputQueue(){
     
@@ -104,4 +145,27 @@ void MiniUART::loadOutputQueue(){
         putChar(MiniUART_output_queue[MiniUART_output_queue_read]);
         MiniUART_output_queue_read = (MiniUART_output_queue_read + 1) & (MiniUART_MAX_QUEUE - 1); // Don't overrun
     }
+}
+
+uint32_t MiniUART::isReadByteReady()  {
+    return mmioRead(ARM_AUX_MU_LSR_REG) & 0x01;
+}
+
+uint32_t MiniUART::isWriteByteReady(){
+    /// we read the 5th bit of ARM_AUX_MU_LSR_REG
+    return mmioRead(ARM_AUX_MU_LSR_REG) & 0x20;
+}
+
+uint32_t MiniUART::isOutputQueueEmpty() {
+    return MiniUART_output_queue_read == MiniUART_output_queue_write;
+}
+
+MiniUART& MiniUART::operator<<(char* buff){
+    print(buff);
+    return *this;
+}
+
+MiniUART& MiniUART::operator<<(int n){
+    print(n);
+    return *this;
 }
