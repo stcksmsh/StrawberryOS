@@ -31,8 +31,12 @@ public:
 
 
     MiniUART& operator<<(char*);
+    
+    MiniUART& operator<<(char);
 
     MiniUART& operator<<(int);
+
+    MiniUART& operator<<(uint64_t);
 
 private:
 

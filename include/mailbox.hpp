@@ -4,7 +4,7 @@
 #include <bcm2711.hpp>
 #include <mmio.hpp>
 
-#define MBOX_BUFF_MAX_SIZE 36 // in bytes
+#define MBOX_BUFF_MAX_SIZE 64 // in uint32_t s
 
 class Mailbox{
 public:
@@ -63,6 +63,27 @@ private:
 #define MBOX_TAG_GET_VC_MEMORY 0x00010006
 #define MBOX_TAG_GET_CLOCKS 0x00010007
 
+/*
+ * Power tags
+ */
+
+#define MBOX_TAG_GET_POWER_STATE 0x00020001
+#define MBOX_TAG_GET_TIMING 0x00020002
+#define MBOX_TAG_SET_POWER_STATE 0x00028001
+
+/*
+ * Device IDs
+ */
+
+#define MBOX_DEVICE_SD_CARD 0x00000000
+#define MBOX_DEVICE_UART0 0x00000001
+#define MBOX_DEVICE_UART1 0x00000002
+#define MBOX_DEVICE_USB_HCD 0x00000003
+#define MBOX_DEVICE_I2C0 0x00000004
+#define MBOX_DEVICE_I2C1 0x00000005
+#define MBOX_DEVICE_I2C2 0x00000006
+#define MBOX_DEVICE_SPI 0x00000007
+#define MBOX_DEVICE_CCP2TX 0x00000008
 
 /*
  *  LED tags

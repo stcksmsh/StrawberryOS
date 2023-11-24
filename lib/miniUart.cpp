@@ -165,7 +165,17 @@ MiniUART& MiniUART::operator<<(char* buff){
     return *this;
 }
 
+MiniUART& MiniUART::operator<<(char ch){
+    putChar(ch);
+    return *this;
+}
+
 MiniUART& MiniUART::operator<<(int n){
+    print(n);
+    return *this;
+}
+
+MiniUART& MiniUART::operator<<(uint64_t n){
     print(n);
     return *this;
 }
