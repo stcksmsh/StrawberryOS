@@ -12,10 +12,10 @@ public:
     void clear();
 
 private:
-    uint32_t m_width, m_height, m_depth;
-    uint32_t m_pitch;
-    volatile uint32_t* m_buffer;
-    Mailbox m_mailbox;    
+    uint32_t m_iWidth, m_iHeight, m_iDepth;
+    uint32_t m_iPitch;
+    volatile uint32_t* m_pBuffer;
+    Mailbox m_Mailbox;    
 };
 
 #endif

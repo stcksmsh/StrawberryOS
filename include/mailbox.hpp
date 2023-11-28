@@ -8,13 +8,21 @@
 
 class Mailbox{
 public:
+    /// call mailbox with channel and data from buffer
     bool call(uint8_t channel);
+    
+    /// clear the mailbox buffer
     void clearBuff();
+    
+    /// write data to buffer
     void writeBuff(int pos, uint32_t data);
+    
+    /// read data from buffer
     uint32_t readBuff(int pos);
     
 private:
-    volatile uint32_t __attribute__((aligned(16))) buff[MBOX_BUFF_MAX_SIZE];  
+    /// pointer to mailbox buffer
+    volatile uint32_t __attribute__((aligned(16))) m_pBuffer[MBOX_BUFF_MAX_SIZE];  
 };
 
 /*

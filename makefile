@@ -32,26 +32,18 @@ OBJCOPY = ${TOOL_PREFIX}objcopy
 OBJDUMP = ${TOOL_PREFIX}objdump
 READELF = ${TOOL_PREFIX}readelf
 
-# # C flags
-# GCCFLAGS =  -Wall -Werror -O2 -ffreestanding 
-# GCCFLAGS += -nostdinc -nostdlib -nostartfiles
-# GCCFLAGS += -ggdb -fno-common -mgeneral-regs-only
-# GCCFLAGS += -mtune=cortex-a72 -fstack-protector
-# GCCFLAGS += -isystem include
-
-# # C++ flags
-# CXXFLAGS =  -Wall -Werror -O2 -ffreestanding
-# CXXFLAGS += -nostdlib -ggdb -fno-common 
-# CXXFLAGS += -mtune=cortex-a72 -fstack-protector
-# CXXFLAGS += -std=c++11 
-# CXXFLAGS += -isystem include
-
-# # # C flags
-GCCFLAGS =  -Wall -Werror -O2 -nostdlib
+# C flags
+GCCFLAGS =  -Wall -Werror -O2 -nostdlib -c
 GCCFLAGS += -ffreestanding -nostartfiles
 GCCFLAGS += -ggdb -fno-common -mgeneral-regs-only
 GCCFLAGS += -mtune=cortex-a72 -fstack-protector
 GCCFLAGS += -isystem include
+
+# # C flags
+# GCCFLAGS =  -Wall -Werror -O2 -nostdlib -c
+# GCCFLAGS += -ffreestanding  -fno-common -g -mcpu=cortex-a72
+# GCCFLAGS += -isystem ${HEADER_DIR}
+
 
 # C++ flags
 CXXFLAGS =  ${GCCFLAGS} -std=c++11 -fno-exceptions -fno-rtti
@@ -75,8 +67,8 @@ CRTN = ${CRT_PREFIX}/crtn.o
 LINK_LIST = ${CRTI} ${OBJ_FILES} ${CRTN}
 
 
-# clean everything and make the image
-all: clean ${KERNEL_IMG} ${ARMSTUB_BIN}
+# make the image
+all: ${KERNEL_IMG} ${ARMSTUB_BIN}
 	@echo "Image created successfully!"
 # remove .img, .elf and all object files
 clean:
@@ -89,20 +81,19 @@ clean:
 ${BUILD_DIR}/%.o: %.cpp makefile | ${BUILD_DIR}
 	@mkdir -p $(dir ${@})
 	@echo "CXX ${<}..."
-	@${CXX} -c $(CXXFLAGS) -MMD -o ${@} ${<}
+	@${CXX} $(CXXFLAGS) -MMD -o ${@} ${<}
 
 # make all c object files
 ${BUILD_DIR}/%.o: m%.c makefile | ${BUILD_DIR}
 	@mkdir -p $(dir ${@})
 	@echo "CC ${<}..."
-	@${CC} -c $(GCCFLAGS) -MMD -o ${@} ${<}
+	@${CC} $(GCCFLAGS) -MMD -o ${@} ${<}
 
 # make all asm object files
 ${BUILD_DIR}/%.o: %.S makefile | ${BUILD_DIR}
 	@mkdir -p $(dir ${@})
 	@echo "AS ${<}..."
-	@${AS} -c $(ASFLAGS) -MMD -o ${@} ${<} 
-	@${AS} -c $(ASFLAGS) -MMD -o ${@} ${<} 
+	@${AS} $(ASFLAGS) -MMD -o ${@} ${<} 
 
 # make the ./build directory if needed
 ${BUILD_DIR}:
@@ -162,3 +153,8 @@ SDCard: all
 	@echo "Unmounting /media/ziltx/bootfs and /media/ziltx/rootfs..."
 	@umount /media/ziltx/bootfs && umount /media/ziltx/rootfs
 	@echo "SDCard ready to be used!"
+
+CNT := $(strip $(shell find ./lib/ ./include/ ./boot/ -type f | xargs wc -l | sed -nE 's/(.+).*total/\1/p'))
+
+README:
+	sed -i -E "s/Lines-[0-9]*[kK]?/Lines-${CNT}/" README.MD

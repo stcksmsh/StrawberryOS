@@ -1,21 +1,21 @@
 #include <machineinfo.hpp>
 #include <mailbox.hpp>
 
-bool MachineInfo::overvoltageAllowed = false;
-bool MachineInfo::OTPProgAllowed = false;
-bool MachineInfo::OTPReadAllowed = false;
-bool MachineInfo::warrantyValid = false;
-bool MachineInfo::revisionStyle = false;
-uint64_t MachineInfo::memSize = 0;
-int MachineInfo::manufacturer = 0;
-int MachineInfo::processor = 0;
-int MachineInfo::model = 0;
-int MachineInfo::revision = 0;
-uint64_t MachineInfo::MAC = 0;
-uint64_t MachineInfo::ARM_MEM_START = 0;
-uint64_t MachineInfo::ARM_MEM_END = 0;
-uint64_t MachineInfo::VC_MEM_START = 0;
-uint64_t MachineInfo::VC_MEM_END = 0;
+bool MachineInfo::m_bOvervoltageAllowed = false;
+bool MachineInfo::m_bOTPProgAllowed = false;
+bool MachineInfo::m_bOTPReadAllowed = false;
+bool MachineInfo::m_bWarrantyValid = false;
+bool MachineInfo::m_bRevisionStyle = false;
+uint64_t MachineInfo::m_lMemSize = 0;
+int MachineInfo::m_iManufacturer = 0;
+int MachineInfo::m_iProcessor = 0;
+int MachineInfo::m_iModel = 0;
+int MachineInfo::m_iRevision = 0;
+uint64_t MachineInfo::m_lMAC = 0;
+uint64_t MachineInfo::m_lARM_MEM_START = 0;
+uint64_t MachineInfo::m_lARM_MEM_END = 0;
+uint64_t MachineInfo::m_lVC_MEM_START = 0;
+uint64_t MachineInfo::m_lVC_MEM_END = 0;
 
 int MachineInfo::getInfo(){
     Mailbox mb = Mailbox();
@@ -60,28 +60,28 @@ int MachineInfo::getInfo(){
     {
         uint32_t revisionVal = mb.readBuff(5);
         /// bit 23
-        revisionStyle = (revisionVal >> 23) & 0x1;  
+        m_bRevisionStyle = (revisionVal >> 23) & 0x1;  
         /// new style
-        if(revisionStyle == 1){
+        if(m_bRevisionStyle == 1){
             /// bit 31
-            overvoltageAllowed = (revisionVal >> 31) & 0x1;
+            m_bOvervoltageAllowed = (revisionVal >> 31) & 0x1;
             /// bit 30
-            OTPProgAllowed = (revisionVal >> 30) & 0x1;
+            m_bOTPProgAllowed = (revisionVal >> 30) & 0x1;
             /// bit 29
-            OTPReadAllowed = (revisionVal >> 29) & 0x1;
+            m_bOTPReadAllowed = (revisionVal >> 29) & 0x1;
             /// bit 25
-            warrantyValid = (revisionVal >> 25) & 0x1;
+            m_bWarrantyValid = (revisionVal >> 25) & 0x1;
             /// bits 20..22
-            memSize = (1<<28) << ((revisionVal >> 20 ) & 0x7);
-            // memSize = revision;
+            m_lMemSize = (1<<28) << ((revisionVal >> 20 ) & 0x7);
+            // m_lmemSize = revision;
             /// bits 16..19
-            manufacturer = (revisionVal >> 16) & 0xF;
+            m_iManufacturer = (revisionVal >> 16) & 0xF;
             /// bits 12..15
-            processor = (revisionVal >> 12) & 0xF;
+            m_iProcessor = (revisionVal >> 12) & 0xF;
             // bits 4..11
-            model = (revisionVal >> 4) & 0xFF;
+            m_iModel = (revisionVal >> 4) & 0xFF;
             /// bits 0..3
-            revision = revisionVal & 0xF;
+            m_iRevision = revisionVal & 0xF;
         }/// old style
         else{
             /// dont think this area is important
@@ -90,16 +90,16 @@ int MachineInfo::getInfo(){
     }
     
     /// get MAC 
-    MAC = ((uint64_t)mb.readBuff(9) << 32) + mb.readBuff(10);
+    m_lMAC = ((uint64_t)mb.readBuff(9) << 32) + mb.readBuff(10);
     
 
     /// get ARM memory data
-    ARM_MEM_START = mb.readBuff(14);
-    ARM_MEM_END = ARM_MEM_START + mb.readBuff(15) - 1;
+    m_lARM_MEM_START = mb.readBuff(14);
+    m_lARM_MEM_END = m_lARM_MEM_START + mb.readBuff(15) - 1;
 
 
     /// get VC memory data
-    VC_MEM_START = mb.readBuff(19);
-    VC_MEM_END = VC_MEM_START + mb.readBuff(20) - 1;
+    m_lVC_MEM_START = mb.readBuff(19);
+    m_lVC_MEM_END = m_lVC_MEM_START + mb.readBuff(20) - 1;
     return 0;
 }

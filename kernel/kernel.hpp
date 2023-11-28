@@ -5,8 +5,11 @@
 
 class Kernel{
 private:
+    /// initialize the kernel
     int init();
-    MachineInfo machineInfo;
+
+    /// information on the machine the kernel runs on
+    MachineInfo m_machineInfo;
 };
 
 #endif

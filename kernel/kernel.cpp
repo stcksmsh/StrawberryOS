@@ -1,17 +1,25 @@
 #include "kernel.hpp"
 #include <miniUart.hpp>
 #include <framebuffer.hpp>
+#include <heapAllocator.hpp>
+#include <sysconfig.hpp>
 
 int Kernel::init()
 {
     MiniUART uart = MiniUART();
     uart.init();
+
+    bool intro = true;
+    bool heapTest = true;
+
     int machineInfoOut = MachineInfo::getInfo();
     /// block containing init messages:
     /// ASCII art, machine info and device power states
-    {
+    if(intro){
         int lvl = 0;
         __asm__ volatile("mrs %0, CurrentEL" : "=r"(lvl));
+        int procNum = 0;
+        __asm__ volatile("mrs %0, MPIDR_EL1" : "=r"(procNum));
         lvl >>= 2;
         uart << (char*)R""""(
     ⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣴⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -35,6 +43,9 @@ int Kernel::init()
     ⠀⠀⠀⠈⠛⠿⢷⣶⣶⣶⡾⠿⠟⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
     Welcome to Strawberry OS\nCurrent privilege level: EL)"""";
         uart.putChar('0' + lvl);
+        uart.putChar('\n');
+        uart << (char*)"Processor number: ";
+        uart.putChar('0' + procNum);
         uart.putChar('\n');
         
         if(machineInfoOut != 0){
@@ -141,7 +152,26 @@ int Kernel::init()
             uart << (char*)"CCP2TX:" << (char*)(mb.readBuff(6) & 0x1 ? "on, " : "off, ")  << (char*)(mb.readBuff(6) & 0x2 ? "doesn't exist" : "exists") << '\n';
         }
     }
-   
+
+    /// testing heap allocator
+    if(heapTest){
+        uart << (char*)"Testing heap allocator";
+        uart.putChar('\n');
+        HeapAllocator heap = HeapAllocator();
+        heap.init(MEM_HEAP_START, 4 * MEGABYTE);
+        uart << (char*)"Free memory: " << heap.getHeapFreeMemory() << (char*)"\n";
+        uart.putChar('\n');
+        int* test = (int*)heap.heapAllocate(sizeof(int)*100);
+        for(int i = 0; i < 100; i++){
+            test[i] = i;
+        }
+        for(int i = 0; i < 100; i++){
+            uart << test[i] << (char*)" ";
+        }
+        uart.putChar('\n');
+        heap.heapFree(test);
+        uart << (char*)"Free memory: " << heap.getHeapFreeMemory() << (char*)"\n";
+    }
     while (1)uart.update();
     return 0;
 }

@@ -44,10 +44,7 @@ void MiniUART::putChar(char ch){
 }
 
 void MiniUART::print(char* buff){
-    while(*buff){
-        if(*buff == '\n')putChar('\r');
-        putChar(*buff++);
-    }
+    while(*buff)putChar(*buff++);
 }
 
 void MiniUART::print(int n){

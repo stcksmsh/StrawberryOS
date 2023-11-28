@@ -8,8 +8,8 @@ void sysinit(){
     // asm volatile ("cpsie f"); // Enable FIQs
     
     // Clear BSS
-    extern unsigned char __bss_start;
-    extern unsigned char __bss_size;
+    extern uint8_t __bss_start;
+    extern uint8_t  __bss_size;
     memset(&__bss_start, 0, __bss_size);
 
     // Call constructors of static objects

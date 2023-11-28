@@ -8,27 +8,37 @@ class MiniUART{
 public:
     MiniUART(){};
 
+    /// initialize the miniUART
     void init();
 
+    /// put a character to the miniUART
     void putChar(char);
     
+    /// print CString to miniUART
     void print(char*);
 
+    /// print an integer to miniUART
     void print(int);
 
+    /// print a 64bit unsigned int in binary to miniUART
     void printBinary(uint64_t);
 
+    /// print a 64bit unsigned int in hex to miniUART
     void printHex(uint64_t);
-    // void print(double, int = 6);
 
+    /// print CString to miniUART and add a newline
     void println(char*);
 
+    /// read a character from the miniUART
     char readChar();
 
+    /// read a line from the miniUART
     char* readLine(char = '\n');
 
+    /// get character, and print back to miniUART
     void update();
 
+    /// the following make the miniUART look like a stream
 
     MiniUART& operator<<(char*);
     
@@ -40,14 +50,16 @@ public:
 
 private:
 
-    uint8_t RX, TX;
-
+    /// load the output queue
     void loadOutputQueue();
 
+    /// is the read byte ready?
     uint32_t isReadByteReady();
     
+    /// is the write byte ready?
     uint32_t isWriteByteReady();
     
+    /// is the output queue empty?
     uint32_t isOutputQueueEmpty();
 };
 #endif

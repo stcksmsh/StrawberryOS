@@ -1,25 +1,26 @@
 #include <exception.hpp>
 #include <bcm2711.hpp>
 
-.macro	vector handler
+	.macro	vector handler
 
 	.balign	128
 
 	b	\handler
 
 	.endm
-	/*
+	
+	
 	.macro	stub name, exception
 
 	.globl	\name
 \name:
-	mrs	x0, esr_el1
-	mrs	x1, spsr_el1
-	mov	x2, x30				 lr */
-	/*mrs	x3, elr_el1
-	mrs	x4, sp_el0
-	mov	x5, sp
-	mrs	x6, far_el1
+	mrs	x0, esr_el1 		/* exception syndrome */
+	mrs	x1, spsr_el1		/* saved program status */
+	mov	x2, x30				/* link register */
+	mrs	x3, elr_el1			/* return address */
+	mrs	x4, sp_el0			/* sp_el0 */
+	mov	x5, sp				/* sp_elx */
+	mrs	x6, far_el1			/* fault address */
 
 	str	x6, [sp, #-16]!
 	stp	x4, x5, [sp, #-16]!
@@ -28,19 +29,13 @@
 
 	mov	x0, #\exception
 	mov	x1, sp
-	b	ExceptionHandler		 never returns */
+	b	ExceptionHandler		 /*never returns */
 
-	//.endm
-
-	.macro stub name, exception
-
-	.globl	\name
-\name:
-	nop
 	.endm
-
+	
+	
 	.text
-
+	.align 11
 
 .globl VectorTable
 VectorTable:
