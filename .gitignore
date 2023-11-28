@@ -1,10 +1,11 @@
 build/
 *.pdf
 *.lst
-/*.img
-/*.elf
+*.elf
+*.img
 test/
 .vscode
 documentation/
 GCC_Cross-Compiler/
 test/
+local.mk

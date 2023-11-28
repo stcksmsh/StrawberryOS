@@ -147,14 +147,7 @@ SDCard: all
 	@cp boot/config.txt ./SDCard
 	@cp ${ARMSTUB_BIN} ./SDCard
 	@cp kernel8.img ./SDCard
-	@echo "Copying contents of SDCard to /media/ziltx/bootfs..."
-	@rm -rfd /media/ziltx/bootfs/*
-	@cp ./SDCard/* /media/ziltx/bootfs/
-	@echo "Unmounting /media/ziltx/bootfs and /media/ziltx/rootfs..."
-	@umount /media/ziltx/bootfs && umount /media/ziltx/rootfs
-	@echo "SDCard ready to be used!"
+	@echo "Done! You can now copy the contents of SDCard to your SD Card's bootfs partition."
 
-CNT := $(strip $(shell find ./lib/ ./include/ ./boot/ -type f | xargs wc -l | sed -nE 's/(.+).*total/\1/p'))
 
-README:
-	sed -i -E "s/Lines-[0-9]*[kK]?/Lines-${CNT}/" README.MD
+include local.mk
