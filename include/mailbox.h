@@ -1,8 +1,8 @@
 #ifndef MBOX_HPP
 #define MBOX_HPP
 
-#include <bcm2711.hpp>
-#include <mmio.hpp>
+#include <bcm2711.h>
+#include <mmio.h>
 
 #define MBOX_BUFF_MAX_SIZE 64 // in uint32_t s
 
@@ -102,8 +102,8 @@ private:
 // the on and off values for the PWR led seem to be flipped???
 /// 0x00000000 turns it on and 0xffffffff turns it off?? further investigation required
 
+#define MBOX_TAG_GET_LED  0x00030041
 #define MBOX_TAG_SET_LED  0x00038041
-
 
 /*
  *  Framebuffer tags

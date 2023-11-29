@@ -1,7 +1,7 @@
-#include <sysconfig.hpp>
-#include <types.hpp>
-#include <util.hpp>
-#include <miniUart.hpp>
+#include <sysconfig.h>
+#include <types.h>
+#include <util.h>
+#include <miniUart.h>
 
 void sysinit(){
     // __asm__ volatile (" cpsie i"); // Enable IRQs 
@@ -19,7 +19,8 @@ void sysinit(){
         (**pFunc)();    
 
 
-    asm volatile("b _ZN6Kernel4initEv");
+    extern int MAINPROC ();    
+    MAINPROC();
     int exitValue = 0;
     asm volatile ("mov %0, x0" : "=r"(exitValue));
     MiniUART uart = MiniUART();

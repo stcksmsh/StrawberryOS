@@ -1,8 +1,8 @@
 #ifndef MiniUART_H
 #define MiniUART_H
 
-#include <gpio.hpp>
-#include <bcm2711.hpp>
+#include <gpio.h>
+#include <bcm2711.h>
 
 class MiniUART{
 public:

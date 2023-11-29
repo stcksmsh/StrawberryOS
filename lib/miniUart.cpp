@@ -1,4 +1,4 @@
-#include <miniUart.hpp>
+#include <miniUart.h>
 
 #define MiniUART_MAX_QUEUE 16384 /// 16 * 1024
 

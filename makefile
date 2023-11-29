@@ -68,7 +68,7 @@ LINK_LIST = ${CRTI} ${OBJ_FILES} ${CRTN}
 
 
 # make the image
-all: ${KERNEL_IMG} ${ARMSTUB_BIN}
+all: clean ${KERNEL_IMG} ${ARMSTUB_BIN}
 	@echo "Image created successfully!"
 # remove .img, .elf and all object files
 clean:

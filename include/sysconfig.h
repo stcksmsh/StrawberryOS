@@ -14,17 +14,21 @@
 #endif
 
 #ifndef KERNEL_STACK_SIZE
-#define KERNEL_STACK_SIZE	128 * KLOBYTE
+#define KERNEL_STACK_SIZE	(128 * KLOBYTE)
 #endif
 
 #ifndef CORES
 #define CORES 4
 #endif
 
-#ifndef EXCEPTION_STACK_SIZE 
-#define EXCEPTION_STACK_SIZE 32 * KLOBYTE
+#ifndef MAINPROC
+#define MAINPROC main
 #endif
 
-#include <memorymap.hpp>
+#ifndef EXCEPTION_STACK_SIZE 
+#define EXCEPTION_STACK_SIZE (32 * KLOBYTE)
+#endif
+
+#include <memorymap.h>
 
 #endif

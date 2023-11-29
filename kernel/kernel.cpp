@@ -1,18 +1,32 @@
-#include "kernel.hpp"
-#include <miniUart.hpp>
-#include <framebuffer.hpp>
-#include <heapAllocator.hpp>
-#include <sysconfig.hpp>
+#include "kernel.h"
+#include <miniUart.h>
+#include <framebuffer.h>
+#include <heapAllocator.h>
+#include <sysconfig.h>
+#include <machineinfo.h>
 
-int Kernel::init()
+Kernel::Kernel():
+    m_memoryManager(false)
+{}
+
+Kernel::~Kernel()
+{}
+
+KernelExitCode Kernel::init()
 {
+    int machineInfoOut = MachineInfo::getInfo();
+    /// if we failed to get machine info, exit
+    if(machineInfoOut != 0){
+        return ShutdownHalt;
+    }
+
     MiniUART uart = MiniUART();
     uart.init();
 
-    bool intro = true;
-    bool heapTest = true;
-
-    int machineInfoOut = MachineInfo::getInfo();
+    // m_memoryManager = MemoryManager(false);
+    bool intro = false;
+    bool heapTest = false;
+    bool memTestHeap = true;
     /// block containing init messages:
     /// ASCII art, machine info and device power states
     if(intro){
@@ -155,23 +169,78 @@ int Kernel::init()
 
     /// testing heap allocator
     if(heapTest){
+        HeapAllocator heap = HeapAllocator();
+        heap.init(MEM_HEAP_START, MEM_HEAP_SIZE);
         uart << (char*)"Testing heap allocator";
         uart.putChar('\n');
-        HeapAllocator heap = HeapAllocator();
-        heap.init(MEM_HEAP_START, 4 * MEGABYTE);
-        uart << (char*)"Free memory: " << heap.getHeapFreeMemory() << (char*)"\n";
+        uart << (char*)"Free memory: ";
+        uart.printHex(heap.getHeapFreeMemory());
         uart.putChar('\n');
-        int* test = (int*)heap.heapAllocate(sizeof(int)*100);
-        for(int i = 0; i < 100; i++){
-            test[i] = i;
-        }
-        for(int i = 0; i < 100; i++){
-            uart << test[i] << (char*)" ";
-        }
+        uart << (char*)"SimpleHeapHeader size: ";
+        uart.printHex(sizeof(SimpleHeapHeader));
         uart.putChar('\n');
+        int **test = (int**)heap.heapAllocate(sizeof(int*)*100);
+        for(int i = 0; i < 100; i++){
+            test[i] = (int*)heap.heapAllocate(sizeof(int)*100);
+            for(int j = 0; j < 100; j++){
+                test[i][j] = i*100 + j;
+            }
+        }
+        int invalid = 0;
+        for(int i = 0; i < 100; i++){
+            for(int j = 0; j < 100; j++){
+                if(test[i][j] != i*100 + j){
+                    invalid++;
+                }
+            }
+            heap.heapFree(test[i]);
+        }
         heap.heapFree(test);
-        uart << (char*)"Free memory: " << heap.getHeapFreeMemory() << (char*)"\n";
+        uart << (char*)"Invalid: " << invalid;
+        uart.putChar('\n');
+        uart << (char*)"Free memory: ";
+        uart.printHex(heap.getHeapFreeMemory());
+        uart.putChar('\n');
+    }
+
+    /// testing memory manager, just the heap stuff
+    if(memTestHeap){
+        uart << (char*)"Testing memory manager";
+        uart.putChar('\n');
+        uart << (char*)"Free memory: ";
+        uart.printHex(MemoryManager::getMemorySize());
+        uart.putChar('\n');
+        uart << (char*)"SimpleHeapHeader size: ";
+        uart.printHex(sizeof(SimpleHeapHeader));
+        uart.putChar('\n');
+        int **test = (int**)MemoryManager::heapAllocate(sizeof(int*)*100);
+        for(int i = 0; i < 100; i++){
+            test[i] = (int*)MemoryManager::heapAllocate(sizeof(int)*100);
+            for(int j = 0; j < 100; j++){
+                test[i][j] = i*100 + j;
+            }
+        }
+        test = (int**)MemoryManager::heapReallocate(test, sizeof(int*)*200);
+        SimpleHeapHeader *reallocTest= reinterpret_cast<SimpleHeapHeader*>(reinterpret_cast<size_t>(test) - sizeof(SimpleHeapHeader));
+        uart << (char*)"Realloc test: ";
+        uart.printHex(reallocTest->nSize);
+        uart.putChar('\n');
+        int invalid = 0;
+        for(int i = 0; i < 100; i++){
+            for(int j = 0; j < 100; j++){
+                if(test[i][j] != i*100 + j){
+                    invalid++;
+                }
+            }
+            MemoryManager::heapFree(test[i]);
+        }
+        uart << (char*)"Invalid: " << invalid;
+        uart.putChar('\n');
+        MemoryManager::heapFree(test);
+        uart << (char*)"Free memory: ";
+        uart.printHex(MemoryManager::getMemorySize());
+        uart.putChar('\n');
     }
     while (1)uart.update();
-    return 0;
+    return ShutdownNone;
 }

@@ -1,8 +1,8 @@
 #ifndef FRAMEBUFFER_HPP
 #define FRAMEBUFFER_HPP
 
-#include <mailbox.hpp>
-#include <types.hpp>
+#include <mailbox.h>
+#include <types.h>
 
 class FrameBuffer {
 public:

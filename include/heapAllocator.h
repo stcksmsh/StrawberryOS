@@ -1,16 +1,15 @@
 #ifndef heapAllocator_HPP
 #define heapAllocator_HPP
 
-#include <memorymap.hpp>
-#include <types.hpp>
+#include <memorymap.h>
+#include <types.h>
 
 struct SimpleHeapHeader{
-    uint32_t nMagic;
-#define HEAP_BLOCK_MAGIC	0x424C4D43
-    size_t nSize;
     SimpleHeapHeader* pNext;
     SimpleHeapHeader* pPrev;
-    bool free;
+    size_t nSize;
+    uint32_t nMagic;
+#define HEAP_BLOCK_MAGIC	0x424C4D43
 };
 
 class HeapAllocator{
@@ -24,23 +23,18 @@ public:
     void init(uintptr_t nStart, size_t nSize);
 
     /// get the size of the heap
-    static size_t getHeapFreeMemory();
+    size_t getHeapFreeMemory();
 
     /// allocate memory from the heap
-    static void* heapAllocate(size_t nSize);
+    void* heapAllocate(size_t nSize);
 
     /// reallocate memory from the heap
-    static void* heapReAllocate(void* pAddress, size_t nSize);
+    void* heapReallocate(void* pAddress, size_t nSize);
 
     /// free memory from the heap
-    static void heapFree(void* pAddress);
-
-    /// get the heap allocator instance
-    static HeapAllocator* get(); 
+    void heapFree(void* pAddress);
 
 private:
-    /// singleton instance
-    static HeapAllocator *m_pInstance;
     
     /// pointer to the start/end of the heap
     SimpleHeapHeader *m_pHead, *m_pTail;

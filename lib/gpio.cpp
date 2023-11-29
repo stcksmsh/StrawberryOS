@@ -1,4 +1,4 @@
-#include <gpio.hpp>
+#include <gpio.h>
 
 void pinSet(uint8_t pin){
     uint64_t reg = 0;

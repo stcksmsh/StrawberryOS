@@ -1,5 +1,5 @@
-#include <exception.hpp>
-#include <bcm2711.hpp>
+#include <exception.h>
+#include <bcm2711.h>
 
 	.macro	vector handler
 

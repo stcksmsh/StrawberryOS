@@ -12,8 +12,8 @@
 	#define GIGABYTE	0x40000000ULL
 #endif
 
-#define MEM_SIZE (4 * GIGABYTE)
-#define GPU_MEM_SIZE (64 * MEGABYTE)
+#define MEM_SIZE (1 * GIGABYTE)
+#define GPU_MEM_SIZE (76 * MEGABYTE)
 #define ARM_MEM_SIZE (MEM_SIZE - GPU_MEM_SIZE)
 
 #define PAGE_SIZE (4 * KILOBYTE)
@@ -33,13 +33,13 @@
 #define MEM_EXCEPTION_STACK_END	(MEM_EXCEPTION_STACK + EXCEPTION_STACK_SIZE * (CORES-1))
 
 // coherent memory region (4 MB)
-#define MEM_COHERENT_REGION	((MEM_EXCEPTION_STACK_END + 2*MEGABYTE) & ~(MEGABYTE-1))
+#define MEM_COHERENT_REGION	((MEM_EXCEPTION_STACK_END + MEGABYTE) & ~(MEGABYTE-1))
 
 #define MEM_HEAP_START		(MEM_COHERENT_REGION + 4*MEGABYTE)
+#define MEM_HEAP_SIZE 		(ARM_MEM_SIZE - MEM_HEAP_START - PAGE_RESERVE)
 
 // high memory region (memory >= 3 GB is not safe to be DMA-able and is not used)
 #define MEM_HIGHMEM_START		GIGABYTE
-#define MEM_HIGHMEM_END			(3 * GIGABYTE - 1)
 
 // PCIe memory range (outbound)
 #define MEM_PCIE_RANGE_START		0x600000000UL

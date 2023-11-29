@@ -1,5 +1,5 @@
-#include <machineinfo.hpp>
-#include <mailbox.hpp>
+#include <machineinfo.h>
+#include <mailbox.h>
 
 bool MachineInfo::m_bOvervoltageAllowed = false;
 bool MachineInfo::m_bOTPProgAllowed = false;
@@ -54,7 +54,7 @@ int MachineInfo::getInfo(){
     mb.writeBuff(21, MBOX_TAG_END);
 
     /// if call fails, return 1
-    if(!mb.call(MBOX_CH_ARM_TO_VC))return 1;
+    if(!mb.call(MBOX_CH_ARM_TO_VC))return -1;
     
     /// get data from revision
     {

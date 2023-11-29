@@ -1,4 +1,4 @@
-#include <mailbox.hpp>
+#include <mailbox.h>
 
 bool Mailbox::call(uint8_t channel){
     unsigned int r = ((unsigned int)((unsigned long)&m_pBuffer) & ~0xF) | (channel & 0xF);

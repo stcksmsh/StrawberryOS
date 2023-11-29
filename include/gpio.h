@@ -1,8 +1,8 @@
 #ifndef GPIO_HPP
 #define GPIO_HPP
 
-#include <bcm2711.hpp>
-#include <mmio.hpp>
+#include <bcm2711.h>
+#include <mmio.h>
 
 /// @brief Specifies the 7 different modes a GPIO pin can be in
 typedef enum{

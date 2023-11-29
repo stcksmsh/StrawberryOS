@@ -1,7 +1,7 @@
 #ifndef PAGE_ALLOCATOR_HPP
 #define PAGE_ALLOCATOR_HPP
 
-#include <types.hpp>
+#include <types.h>
 
 class PageAllocator
 {

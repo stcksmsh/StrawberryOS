@@ -1,4 +1,4 @@
-#include <util.hpp>
+#include <util.h>
 
 int memcmp(const void *p1, const void *p2, size_t nLength)
 {

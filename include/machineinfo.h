@@ -1,7 +1,7 @@
 #ifndef MACHINEINFO_HPP
 #define MACHINEINFO_HPP
 
-#include <mailbox.hpp>
+#include <mailbox.h>
 
 class MachineInfo{
 

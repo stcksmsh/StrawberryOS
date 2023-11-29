@@ -1,24 +1,27 @@
 #ifndef MEMORY_MANAGER_HPP
 #define MEMORY_MANAGER_HPP
 
-#include <memorymap.hpp>
-#include <heapAllocator.hpp>
-#include <pageAllocator.hpp>
+#include <memorymap.h>
+#include <heapAllocator.h>
+#include <pageAllocator.h>
 
 class MemoryManager
 {
 public:
-    MemoryManager();
+    MemoryManager(bool bEnableMMU);
     ~MemoryManager();
 
-    /// initialize the memory manager
-    static MemoryManager *get();
-
     /// get remaining memory
-    size_t getMemorySize();
+    static size_t getMemorySize();
 
     /// allocate, prefers HIGH memory
     static void* heapAllocate(size_t size);
+
+    /// reallocate, prefers HIGH memory
+    static void* heapReallocate(void* pMem, size_t size);
+
+    /// free memory
+    static void heapFree(void* pMem);
 
 private:
     /// enable Memory Management Unit
@@ -26,12 +29,6 @@ private:
 
     /// is the MMU enabled?
     bool m_bEnableMMU;
-
-    /// memory size for LOW portion
-    size_t m_lMemSizeLow;
-    
-    /// memory size for HIGH portion
-    size_t m_lMemSizeHigh;
 
     /// heap allocator for LOW memory
     HeapAllocator m_HeapLow;

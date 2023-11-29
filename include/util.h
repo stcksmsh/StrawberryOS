@@ -1,7 +1,7 @@
 #ifndef UTIL_HPP
 #define UTIL_HPP
 
-#include <types.hpp>
+#include <types.h>
 
 /// set memory region to a value
 extern "C" void *memset(void *pBuffer, int nValue, size_t nLength);

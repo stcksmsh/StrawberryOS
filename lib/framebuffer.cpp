@@ -1,4 +1,4 @@
-#include <framebuffer.hpp>
+#include <framebuffer.h>
 
 FrameBuffer::FrameBuffer(uint32_t width, uint32_t height, uint32_t depth)
     : m_iWidth(width), m_iHeight(height), m_iDepth(depth){
