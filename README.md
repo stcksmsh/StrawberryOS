@@ -17,6 +17,13 @@ Currently the only features that work are:
 - the Video Core mailbox for retrieving machine information such as the revision number, burned-in MAC address etc.
 - simple heap allocation
 
+## Documentation
+
+I have created several `.md` documentation files in the `doc/` folder, 
+> - Information on [notation](./doc/notation.md)
+> - Short explanation of all the [classes](./doc/classes.md)
+> - Some information on [mailboxes](./doc/mailbox.md)
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first
