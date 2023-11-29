@@ -1,5 +1,5 @@
-#ifndef ASSERT_HPP
-#define ASSERT_HPP
+#ifndef ASSERT_H
+#define ASSERT_H
 
 
 // extern "C" void __assert_failed(const char *__assertion, const char *__file,
@@ -18,4 +18,4 @@
     // : __assert_failed(#expr, __FILE__, __LINE__, __PRETTY_FUNCTION__) \
     // )
 
-#endif // ASSERT_HPP
+#endif // ASSERT_H

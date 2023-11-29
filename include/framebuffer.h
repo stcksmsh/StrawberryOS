@@ -1,5 +1,5 @@
-#ifndef FRAMEBUFFER_HPP
-#define FRAMEBUFFER_HPP
+#ifndef FRAMEBUFFER_H
+#define FRAMEBUFFER_H
 
 #include <mailbox.h>
 #include <types.h>
@@ -14,8 +14,8 @@ public:
 private:
     uint32_t m_iWidth, m_iHeight, m_iDepth;
     uint32_t m_iPitch;
-    volatile uint32_t* m_pBuffer;
+    volatile uint32_t* m_piBuffer;
     Mailbox m_Mailbox;    
 };
 
-#endif
+#endif  // FRAMEBUFFER_H

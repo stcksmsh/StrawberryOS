@@ -16,7 +16,7 @@ void HeapAllocator::init(uintptr_t nStart, size_t nSize){
         return;
     }
     m_pHead = reinterpret_cast<SimpleHeapHeader*>(nStart);
-    m_pHead->nMagic = HEAP_BLOCK_MAGIC;
+    m_pHead->u32Magic = HEAP_BLOCK_MAGIC;
     m_pHead->nSize = nSize - sizeof(SimpleHeapHeader);
     m_pHead->pNext = 0;
     m_pHead->pPrev = 0;
@@ -27,7 +27,7 @@ size_t HeapAllocator::getHeapFreeMemory(){
     size_t nFreeMemory = 0;
     SimpleHeapHeader* pCurrent = m_pHead;
     while(pCurrent != 0){
-        assert(pCurrent->nMagic == HEAP_BLOCK_MAGIC);
+        assert(pCurrent->u32Magic == HEAP_BLOCK_MAGIC);
         nFreeMemory += pCurrent->nSize;
         pCurrent = pCurrent->pNext;
     }
@@ -37,11 +37,11 @@ size_t HeapAllocator::getHeapFreeMemory(){
 void* HeapAllocator::heapAllocate(size_t nSize){
     SimpleHeapHeader* pCurrent = m_pHead;
     while(pCurrent != 0){
-        assert(pCurrent->nMagic == HEAP_BLOCK_MAGIC);
+        assert(pCurrent->u32Magic == HEAP_BLOCK_MAGIC);
         if(pCurrent->nSize >= nSize){
             if(pCurrent->nSize > nSize + sizeof(SimpleHeapHeader)){
                 SimpleHeapHeader* pNewBlock = reinterpret_cast<SimpleHeapHeader*>(reinterpret_cast<size_t>(pCurrent) + sizeof(SimpleHeapHeader) + nSize);
-                pNewBlock->nMagic = HEAP_BLOCK_MAGIC;
+                pNewBlock->u32Magic = HEAP_BLOCK_MAGIC;
                 pNewBlock->nSize = pCurrent->nSize - nSize - sizeof(SimpleHeapHeader);
                 pNewBlock->pNext = pCurrent->pNext;
                 pCurrent->pNext = pNewBlock;
@@ -71,7 +71,7 @@ void* HeapAllocator::heapReallocate(void* pAddress, size_t nSize){
         return 0;
     } 
     SimpleHeapHeader *pCurrent = reinterpret_cast<SimpleHeapHeader*>(reinterpret_cast<uintptr_t>(pAddress) - sizeof(SimpleHeapHeader));
-    assert(pCurrent->nMagic == HEAP_BLOCK_MAGIC);
+    assert(pCurrent->u32Magic == HEAP_BLOCK_MAGIC);
     
     SimpleHeapHeader *pSearch = m_pHead;
     while(pSearch != 0 && pSearch < pCurrent){
@@ -82,7 +82,7 @@ void* HeapAllocator::heapReallocate(void* pAddress, size_t nSize){
         size_t nBytesTaken = nSize - pCurrent -> nSize;
         pSearch -> nSize -= nBytesTaken;
         SimpleHeapHeader *pNewBlock = reinterpret_cast<SimpleHeapHeader*>(reinterpret_cast<uintptr_t>(pSearch) + nBytesTaken);
-        pNewBlock -> nMagic = HEAP_BLOCK_MAGIC;
+        pNewBlock -> u32Magic = HEAP_BLOCK_MAGIC;
         pNewBlock -> nSize = pSearch -> nSize;
         pNewBlock -> pNext = pSearch -> pNext;
         pNewBlock -> pPrev = pSearch -> pPrev;
@@ -110,7 +110,7 @@ void HeapAllocator::heapFree(void* pAddress){
         return;
     }
     SimpleHeapHeader *pCurrent = reinterpret_cast<SimpleHeapHeader*>(reinterpret_cast<uintptr_t>(pAddress) - sizeof(SimpleHeapHeader));
-    assert(pCurrent->nMagic == HEAP_BLOCK_MAGIC);
+    assert(pCurrent->u32Magic == HEAP_BLOCK_MAGIC);
     /// find the right place to insert
     SimpleHeapHeader *pInsert = m_pHead;
     while(pInsert != 0 && pInsert < pCurrent){

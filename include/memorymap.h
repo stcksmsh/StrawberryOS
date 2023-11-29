@@ -1,5 +1,5 @@
-#ifndef MEMORYMAP_HPP
-#define MEMORYMAP_HPP
+#ifndef MEMORYMAP_H
+#define MEMORYMAP_H
 
 
 #ifndef KILOBYTE
@@ -53,4 +53,4 @@
 #define MEM_PCIE_DMA_RANGE_SIZE		0x100000000UL
 #define MEM_PCIE_DMA_RANGE_PCIE_START	0UL			// mapping on PCIe side
 
-#endif
+#endif // MEMORYMAP_H

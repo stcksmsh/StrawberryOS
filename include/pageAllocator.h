@@ -1,5 +1,5 @@
-#ifndef PAGE_ALLOCATOR_HPP
-#define PAGE_ALLOCATOR_HPP
+#ifndef PAGE_ALLOCATOR_H
+#define PAGE_ALLOCATOR_H
 
 #include <types.h>
 
@@ -10,16 +10,16 @@ public:
     ~PageAllocator();
 
     /// initialize the page allocator
-    void Setup(uintptr_t start, uintptr_t end);
+    void Setup(uintptr_t aStart, uintptr_t aEnd);
 
     /// get available memory
     size_t getFreeMemory();
 
     /// allocate a page
-    void *allocate(size_t size);
+    void *allocate(size_t nSize);
 
     /// free a page
     void free(void *ptr);
 };
 
-#endif
+#endif  // PAGE_ALLOCATOR_H

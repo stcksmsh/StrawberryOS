@@ -363,4 +363,4 @@
 #define ARM_CSI1_CLKGATE	(ARM_IO_BASE + 0x802004)	// 4 bytes
 
 
-#endif
+#endif // BCM2711_H

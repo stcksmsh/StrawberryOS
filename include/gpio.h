@@ -1,5 +1,5 @@
-#ifndef GPIO_HPP
-#define GPIO_HPP
+#ifndef GPIO_H
+#define GPIO_H
 
 #include <bcm2711.h>
 #include <mmio.h>
@@ -26,24 +26,24 @@ typedef enum{
 /// @brief sets the pull for the specified pin
 /// @param pin the number of the pin to change pull
 /// @param pull the pull to set
-void pinPull(uint8_t pin, GPIO_PULL pull);
+void pinPull(uint8_t u8Pin, GPIO_PULL pull);
 
 /// @brief Sets the desired  GPIO pin to input, output or some alternative function
 /// @param pin the number of the pin to set
 /// @param mode the mode to set it to
-void pinMode(uint8_t pin, GPIO_MODE mode);
+void pinMode(uint8_t u8Pin, GPIO_MODE mode);
 
 /// @brief Sets the specified pin
 /// @param pin the pin to set [0..57]
-void pinSet(int pin);
+void pinSet(uint8_t u8Pin);
 
 /// @brief Clears the specified pin
 /// @param pin the pin to clear [0..57]]
-void pinClear(uint8_t pin);
+void pinClear(uint8_t u8Pin);
 
 /// @brief Reads the value of the specified pin
 /// @param pin the pin to read [0..57]
 /// @return 0 if not set, more than 0 if set, less than 0 if error
-int pinRead(uint8_t pin);
+int pinRead(uint8_t u8Pin);
 
-#endif
+#endif  // GPIO_H

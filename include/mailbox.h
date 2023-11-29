@@ -1,5 +1,5 @@
-#ifndef MBOX_HPP
-#define MBOX_HPP
+#ifndef MBOX_H
+#define MBOX_H
 
 #include <bcm2711.h>
 #include <mmio.h>
@@ -9,16 +9,16 @@
 class Mailbox{
 public:
     /// call mailbox with channel and data from buffer
-    bool call(uint8_t channel);
+    bool call(uint8_t u8_channel);
     
     /// clear the mailbox buffer
     void clearBuff();
     
     /// write data to buffer
-    void writeBuff(int pos, uint32_t data);
+    void writeBuff(int iPos, uint32_t data);
     
     /// read data from buffer
-    uint32_t readBuff(int pos);
+    uint32_t readBuff(int iPos);
     
 private:
     /// pointer to mailbox buffer
@@ -152,4 +152,4 @@ private:
 #define MBOX_TAG_SET_PALETTE 0x0004800B
 
 
-#endif 
+#endif // MBOX_H

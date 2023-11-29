@@ -62,4 +62,4 @@ private:
     /// is the output queue empty?
     uint32_t isOutputQueueEmpty();
 };
-#endif
+#endif  // MiniUART_H

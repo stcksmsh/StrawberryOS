@@ -1,5 +1,5 @@
-#ifndef KERNEL_HEADER
-#define KERNEL_HEADER
+#ifndef KERNEL_H
+#define KERNEL_H
 
 #include <memoryManager.h>
 
@@ -24,4 +24,4 @@ private:
     MemoryManager m_memoryManager;
 };
 
-#endif
+#endif  // KERNEL_H

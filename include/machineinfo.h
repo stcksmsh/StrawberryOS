@@ -1,5 +1,5 @@
-#ifndef MACHINEINFO_HPP
-#define MACHINEINFO_HPP
+#ifndef MACHINEINFO_H
+#define MACHINEINFO_H
 
 #include <mailbox.h>
 
@@ -44,7 +44,7 @@ public:
     /// @brief gets the RAM capacity in bytes
     /// @return the RAM capacity in bytes
     static uint64_t getMemSize() {
-        return m_lMemSize;
+        return m_aMemSize;
     }
 
     /// @brief gets the manufacturer
@@ -72,23 +72,23 @@ public:
     }
 
     static uint64_t getMAC() {
-        return m_lMAC;
+        return m_u64MAC;
     }
 
     static uint64_t getARM_MEM_START() {
-        return m_lARM_MEM_START;
+        return m_aARM_MEM_START;
     }
 
     static uint64_t getARM_MEM_END() {
-        return m_lARM_MEM_END;
+        return m_aARM_MEM_END;
     }
 
     static uint64_t getVC_MEM_START() {
-        return m_lVC_MEM_START;
+        return m_aVC_MEM_START;
     }
 
     static uint64_t getVC_MEM_END() {
-        return m_lVC_MEM_END;
+        return m_aVC_MEM_END;
     }
 
 
@@ -105,7 +105,7 @@ private:
     /*
      * RAM capacity in bytes (possible values: 256MB, 512MB, ... 4GB, 8GB)
      */
-    static uint64_t m_lMemSize;
+    static uintptr_t m_aMemSize;
     /*
      * 0 - Sony UK
      * 1 - Egoman
@@ -153,18 +153,18 @@ private:
      */
     static int m_iRevision;
 
-    static uint64_t m_lMAC;
+    static uint64_t m_u64MAC;
 
-    static uint64_t m_lARM_MEM_START;
+    static uintptr_t m_aARM_MEM_START;
     
-    static uint64_t m_lARM_MEM_END;
+    static uintptr_t m_aARM_MEM_END;
 
-    static uint64_t m_lVC_MEM_START;
+    static uintptr_t m_aVC_MEM_START;
     
-    static uint64_t m_lVC_MEM_END;
+    static uintptr_t m_aVC_MEM_END;
 
 };
     
 
 
-#endif
+#endif  // MACHINEINFO_H

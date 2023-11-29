@@ -6,16 +6,16 @@ bool MachineInfo::m_bOTPProgAllowed = false;
 bool MachineInfo::m_bOTPReadAllowed = false;
 bool MachineInfo::m_bWarrantyValid = false;
 bool MachineInfo::m_bRevisionStyle = false;
-uint64_t MachineInfo::m_lMemSize = 0;
+uint64_t MachineInfo::m_aMemSize = 0;
 int MachineInfo::m_iManufacturer = 0;
 int MachineInfo::m_iProcessor = 0;
 int MachineInfo::m_iModel = 0;
 int MachineInfo::m_iRevision = 0;
-uint64_t MachineInfo::m_lMAC = 0;
-uint64_t MachineInfo::m_lARM_MEM_START = 0;
-uint64_t MachineInfo::m_lARM_MEM_END = 0;
-uint64_t MachineInfo::m_lVC_MEM_START = 0;
-uint64_t MachineInfo::m_lVC_MEM_END = 0;
+uint64_t MachineInfo::m_u64MAC = 0;
+uint64_t MachineInfo::m_aARM_MEM_START = 0;
+uint64_t MachineInfo::m_aARM_MEM_END = 0;
+uint64_t MachineInfo::m_aVC_MEM_START = 0;
+uint64_t MachineInfo::m_aVC_MEM_END = 0;
 
 int MachineInfo::getInfo(){
     Mailbox mb = Mailbox();
@@ -72,7 +72,7 @@ int MachineInfo::getInfo(){
             /// bit 25
             m_bWarrantyValid = (revisionVal >> 25) & 0x1;
             /// bits 20..22
-            m_lMemSize = (1<<28) << ((revisionVal >> 20 ) & 0x7);
+            m_aMemSize = (1<<28) << ((revisionVal >> 20 ) & 0x7);
             // m_lmemSize = revision;
             /// bits 16..19
             m_iManufacturer = (revisionVal >> 16) & 0xF;
@@ -90,16 +90,16 @@ int MachineInfo::getInfo(){
     }
     
     /// get MAC 
-    m_lMAC = ((uint64_t)mb.readBuff(9) << 32) + mb.readBuff(10);
+    m_u64MAC = ((uint64_t)mb.readBuff(9) << 32) + mb.readBuff(10);
     
 
     /// get ARM memory data
-    m_lARM_MEM_START = mb.readBuff(14);
-    m_lARM_MEM_END = m_lARM_MEM_START + mb.readBuff(15) - 1;
+    m_aARM_MEM_START = mb.readBuff(14);
+    m_aARM_MEM_END = m_aARM_MEM_START + mb.readBuff(15) - 1;
 
 
     /// get VC memory data
-    m_lVC_MEM_START = mb.readBuff(19);
-    m_lVC_MEM_END = m_lVC_MEM_START + mb.readBuff(20) - 1;
+    m_aVC_MEM_START = mb.readBuff(19);
+    m_aVC_MEM_END = m_aVC_MEM_START + mb.readBuff(20) - 1;
     return 0;
 }

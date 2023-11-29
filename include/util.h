@@ -1,5 +1,5 @@
-#ifndef UTIL_HPP
-#define UTIL_HPP
+#ifndef UTIL_H
+#define UTIL_H
 
 #include <types.h>
 
@@ -15,4 +15,4 @@ extern "C" void *memmove(void *pDest, const void *pSrc, size_t nLength);
 /// compare memory regions
 extern "C" int memcmp(const void *p1, const void *p2, size_t nLength);
 
-#endif
+#endif  // UTIL_H

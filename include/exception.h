@@ -1,8 +1,8 @@
-#ifndef EXCEPTION_HPP
-#define EXCEPTION_HPP
+#ifndef EXCEPTION_H
+#define EXCEPTION_H
 
 #define EXCEPTION_UNEXPECTED			0
 #define EXCEPTION_SYNCHRONOUS			1
 #define EXCEPTION_SYSTEM_ERROR			2
 
-#endif
+#endif // EXCEPTION_H

@@ -1,5 +1,5 @@
-#ifndef MEMORY_MANAGER_HPP
-#define MEMORY_MANAGER_HPP
+#ifndef MEMORY_MANAGER_H
+#define MEMORY_MANAGER_H
 
 #include <memorymap.h>
 #include <heapAllocator.h>
@@ -15,10 +15,10 @@ public:
     static size_t getMemorySize();
 
     /// allocate, prefers HIGH memory
-    static void* heapAllocate(size_t size);
+    static void* heapAllocate(size_t nSize);
 
     /// reallocate, prefers HIGH memory
-    static void* heapReallocate(void* pMem, size_t size);
+    static void* heapReallocate(void* pMem, size_t nSize);
 
     /// free memory
     static void heapFree(void* pMem);
@@ -43,4 +43,4 @@ private:
     static MemoryManager *m_pInstance;
 };
 
-#endif
+#endif  // MEMORY_MANAGER_H

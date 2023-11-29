@@ -18,8 +18,12 @@ Data variables:	[m_]\<type\>\<identifier\>
 >> - CString - str
 >> - char - c
 >> - char* - sz
->> - pointer - p
+>> - pointer  - p\<type\>
 >> - enum - e
+>> - size_t - n
+>> - uintptr_t - a
+>> - uint\<n\>_t - u\<n\>
+>> - int\<n\>_t - i\<n\>
 >>
 >
 > Data variables are never public, and only protected in case inheritance will happen
@@ -32,3 +36,5 @@ Class member organization:
 >> - protected
 >> - private
 >>
+
+---

@@ -1,5 +1,5 @@
-#ifndef EXCEPTION_HANDLER_HPP
-#define EXCEPTION_HANDLER_HPP
+#ifndef EXCEPTION_HANDLER_H
+#define EXCEPTION_HANDLER_H
 
 #include <types.h>
 struct __attribute__ ((packed)) TAbortFrame
@@ -15,9 +15,9 @@ struct __attribute__ ((packed)) TAbortFrame
 };
 
 extern "C"{
-    void ExceptionHandler (uint64_t nException, TAbortFrame *pFrame);
+    void ExceptionHandler (uint64_t u64Exception, TAbortFrame *pFrame);
     void InterruptHandler (void);
 };
 
 
-#endif
+#endif // EXCEPTION_HANDLER_H

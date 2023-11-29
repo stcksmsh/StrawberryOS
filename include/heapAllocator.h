@@ -1,5 +1,5 @@
-#ifndef heapAllocator_HPP
-#define heapAllocator_HPP
+#ifndef heapAllocator_H
+#define heapAllocator_H
 
 #include <memorymap.h>
 #include <types.h>
@@ -8,7 +8,7 @@ struct SimpleHeapHeader{
     SimpleHeapHeader* pNext;
     SimpleHeapHeader* pPrev;
     size_t nSize;
-    uint32_t nMagic;
+    uint32_t u32Magic;
 #define HEAP_BLOCK_MAGIC	0x424C4D43
 };
 
@@ -43,4 +43,4 @@ private:
 
 
 
-#endif
+#endif  // heapAllocator_H

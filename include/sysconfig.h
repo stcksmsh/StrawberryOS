@@ -31,4 +31,4 @@
 
 #include <memorymap.h>
 
-#endif
+#endif  // SYSCONFIG_H

@@ -53,7 +53,7 @@ FrameBuffer::FrameBuffer(uint32_t width, uint32_t height, uint32_t depth)
         m_iWidth = m_Mailbox.readBuff(10);
         m_iHeight = m_Mailbox.readBuff(11);
         m_iPitch = m_Mailbox.readBuff(33);
-        m_pBuffer = (uint32_t*)((uint64_t)m_Mailbox.readBuff(28) & 0x3FFFFFFF);
+        m_piBuffer = (uint32_t*)((uint64_t)m_Mailbox.readBuff(28) & 0x3FFFFFFF);
     }
 
 }
@@ -64,7 +64,7 @@ void FrameBuffer::clear()
 {
     for(uint32_t x = 0; x < m_iWidth; x++){
         for(uint32_t y = 0; y < m_iHeight; y++){
-            m_pBuffer[x * 4 + y * m_iPitch] = 0x0000AA00;
+            m_piBuffer[x * 4 + y * m_iPitch] = 0x0000AA00;
         }
     }
 }
