@@ -20,9 +20,9 @@ Currently the only features that work are:
 ## Documentation
 
 I have created several `.md` documentation files in the `doc/` folder, 
-> - Information on [notation](./doc/notation.md)
-> - Short explanation of all the [classes](./doc/classes.md)
-> - Some information on [mailboxes](./doc/mailbox.md)
+> - Information on [notation](./docs/notation.md)
+> - Short explanation of all the [classes](./docs/classes.md)
+> - Some information on [mailboxes](./docs/mailbox.md)
 
 ## Contributing
 
