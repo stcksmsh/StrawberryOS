@@ -1,3 +1,11 @@
+/*
+ * mmio.h
+ *
+ * stcksmsh[github.com] - vukicevickosta@gmail.com
+ * 
+ * contains functions for reading and writing to MMIO registers
+ */
+
 #ifndef MMIO_H
 #define MMIO_H
 

@@ -1,3 +1,11 @@
+/*
+ * mailbox.h
+ *
+ * stcksmsh[github.com] - vukicevickosta@gmail.com
+ * 
+ * Mailbox class for communicating with the VideoCore
+ */
+
 #ifndef MBOX_H
 #define MBOX_H
 

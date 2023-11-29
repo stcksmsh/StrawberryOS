@@ -1,3 +1,11 @@
+/*
+ *  machineinfo.h
+ *
+ * stcksmsh[github.com] - vukicevickosta@gmail.com
+ * 
+ *  MachineInfo class for getting information on the host machine
+ */
+
 #ifndef MACHINEINFO_H
 #define MACHINEINFO_H
 

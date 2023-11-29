@@ -24,8 +24,8 @@ KernelExitCode Kernel::init()
     uart.init();
 
     // m_memoryManager = MemoryManager(false);
-    bool intro = false;
-    bool heapTest = false;
+    bool intro = true;
+    bool heapTest = true;
     bool memTestHeap = true;
     /// block containing init messages:
     /// ASCII art, machine info and device power states
@@ -54,8 +54,11 @@ KernelExitCode Kernel::init()
     ⢻⣷⢸⣀⡿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠻⠶⠛⠀⠀⠈⣩⡾⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀
     ⠀⢿⣧⠉⠀⠀⡴⢳⠀⠀⢀⣴⢒⡆⠀⠀⠀⣠⣴⠞⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
     ⠀⠈⠻⣷⣄⡀⠷⠛⠀⠀⠘⠿⣟⣡⣤⡶⠟⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-    ⠀⠀⠀⠈⠛⠿⢷⣶⣶⣶⡾⠿⠟⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-    Welcome to Strawberry OS\nCurrent privilege level: EL)"""";
+    ⠀⠀⠀⠈⠛⠿⢷⣶⣶⣶⡾⠿⠟⠋⠁)"""";
+        uart.putChar('\n');
+        uart << (char*)"Welcome to Strawberry OS";
+        uart.putChar('\n');
+        uart << (char*) "Current privilege level: EL";
         uart.putChar('0' + lvl);
         uart.putChar('\n');
         uart << (char*)"Processor number: ";
@@ -176,9 +179,6 @@ KernelExitCode Kernel::init()
         uart << (char*)"Free memory: ";
         uart.printHex(heap.getHeapFreeMemory());
         uart.putChar('\n');
-        uart << (char*)"SimpleHeapHeader size: ";
-        uart.printHex(sizeof(SimpleHeapHeader));
-        uart.putChar('\n');
         int **test = (int**)heap.heapAllocate(sizeof(int*)*100);
         for(int i = 0; i < 100; i++){
             test[i] = (int*)heap.heapAllocate(sizeof(int)*100);
@@ -210,9 +210,6 @@ KernelExitCode Kernel::init()
         uart << (char*)"Free memory: ";
         uart.printHex(MemoryManager::getMemorySize());
         uart.putChar('\n');
-        uart << (char*)"SimpleHeapHeader size: ";
-        uart.printHex(sizeof(SimpleHeapHeader));
-        uart.putChar('\n');
         int **test = (int**)MemoryManager::heapAllocate(sizeof(int*)*100);
         for(int i = 0; i < 100; i++){
             test[i] = (int*)MemoryManager::heapAllocate(sizeof(int)*100);
@@ -221,10 +218,6 @@ KernelExitCode Kernel::init()
             }
         }
         test = (int**)MemoryManager::heapReallocate(test, sizeof(int*)*200);
-        SimpleHeapHeader *reallocTest= reinterpret_cast<SimpleHeapHeader*>(reinterpret_cast<size_t>(test) - sizeof(SimpleHeapHeader));
-        uart << (char*)"Realloc test: ";
-        uart.printHex(reallocTest->nSize);
-        uart.putChar('\n');
         int invalid = 0;
         for(int i = 0; i < 100; i++){
             for(int j = 0; j < 100; j++){

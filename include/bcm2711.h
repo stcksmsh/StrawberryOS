@@ -1,3 +1,11 @@
+/*
+ *	bcm2711.h
+ *
+ *  stcksmsh[github.com] - vukicevickosta@gmail.com
+ *
+ * 	BCM2711 (Raspberry Pi 4) addresses
+ */
+
 #ifndef BCM2711_H
 #define BCM2711_H
 

@@ -65,4 +65,19 @@ void MemoryManager::EnableMMU()
     assert(m_bEnableMMU);
 }
 
+void *MemoryManager::getCoherentPage(uint8_t u8Slot)
+{
+    if(u8Slot >= 32)
+        return 0;
+    return reinterpret_cast<void*>(MEM_COHERENT_REGION + u8Slot * PAGE_SIZE);
+}
 
+void *MemoryManager::pageAllocate()
+{
+    return m_pInstance->m_Pager.pageAllocate();
+}
+
+void MemoryManager::pageFree(void *pMem)
+{
+    m_pInstance->m_Pager.pageFree(pMem);
+}

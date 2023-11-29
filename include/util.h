@@ -1,3 +1,12 @@
+/*
+ * util.h
+ *
+ * stcksmsh[github.com] - vukicevickosta@gmail.com
+ * 
+ * contains utility functions
+ */
+
+
 #ifndef UTIL_H
 #define UTIL_H
 

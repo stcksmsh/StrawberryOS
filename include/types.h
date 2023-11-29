@@ -1,3 +1,11 @@
+/*
+ * types.h
+ *
+ * stcksmsh[github.com] - vukicevickosta@gmail.com
+ * 
+ * should be used instead of stdint.h
+ */
+
 #ifndef TYPES_H
 #define TYPES_H
 

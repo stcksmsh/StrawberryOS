@@ -44,7 +44,7 @@ void MiniUART::putChar(char ch){
 }
 
 void MiniUART::print(char* buff){
-    while(*buff)putChar(*buff++);
+    while(*buff != 0)putChar(*buff++);
 }
 
 void MiniUART::print(int n){

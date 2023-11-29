@@ -1,3 +1,12 @@
+/*
+ * kernel.h
+ *
+ * stcksmsh[github.com] - vukicevickosta@gmail.com
+ * 
+ * Kernel class, the main class of the kernel
+ */
+
+
 #ifndef KERNEL_H
 #define KERNEL_H
 

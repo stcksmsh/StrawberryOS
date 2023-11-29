@@ -1,3 +1,13 @@
+/*
+ * memorymap.h
+ *
+ * stcksmsh[github.com] - vukicevickosta@gmail.com
+ * 
+ * Contains definitions for the memory map of the system
+ * DO NOT INCLUDE THIS FILE DIRECTLY, INCLUDE IT THROUGH sysconfig.h !!!
+ */
+
+
 #ifndef MEMORYMAP_H
 #define MEMORYMAP_H
 

@@ -1,3 +1,11 @@
+/*
+ *  assert.h
+ * 
+ *  stcksmsh[github.com] - vukicevickosta@gmail.com
+ *
+ *  assert macro for checking conditions at runtime
+ */
+
 #ifndef ASSERT_H
 #define ASSERT_H
 

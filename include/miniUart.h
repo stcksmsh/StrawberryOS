@@ -1,3 +1,11 @@
+/*
+ * miniUart.h
+ *
+ * stcksmsh[github.com] - vukicevickosta@gmail.com
+ * 
+ * MiniUART class serves as a stream for communicating through the miniUART
+ */
+
 #ifndef MiniUART_H
 #define MiniUART_H
 

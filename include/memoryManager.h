@@ -1,9 +1,18 @@
+/*
+ * memoryManager.h
+ *
+ * stcksmsh[github.com] - vukicevickosta@gmail.com
+ * 
+ * Memory Manager class for managing all system memory
+ */
+
 #ifndef MEMORY_MANAGER_H
 #define MEMORY_MANAGER_H
 
 #include <memorymap.h>
 #include <heapAllocator.h>
 #include <pageAllocator.h>
+#include <translationTable.h>
 
 class MemoryManager
 {
@@ -14,6 +23,9 @@ public:
     /// get remaining memory
     static size_t getMemorySize();
 
+    /// get the specified coherent memory page
+    static void* getCoherentPage(uint8_t u8Slot);
+
     /// allocate, prefers HIGH memory
     static void* heapAllocate(size_t nSize);
 
@@ -22,6 +34,12 @@ public:
 
     /// free memory
     static void heapFree(void* pMem);
+
+    /// allocate a page
+    static void* pageAllocate();
+
+    /// free a page
+    static void pageFree(void* pMem);
 
 private:
     /// enable Memory Management Unit
@@ -38,6 +56,9 @@ private:
 
     /// page allocator
     PageAllocator m_Pager;
+
+    /// translation table
+    TranslationTable *m_pTranslationTable;
     
     /// singleton instance
     static MemoryManager *m_pInstance;

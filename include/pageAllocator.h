@@ -1,3 +1,11 @@
+/*
+ * pageAllocator.h
+ *
+ * stcksmsh[github.com] - vukicevickosta@gmail.com
+ * 
+ * PageAllocator class for allocating pages
+ */
+
 #ifndef PAGE_ALLOCATOR_H
 #define PAGE_ALLOCATOR_H
 
@@ -10,16 +18,26 @@ public:
     ~PageAllocator();
 
     /// initialize the page allocator
-    void Setup(uintptr_t aStart, uintptr_t aEnd);
+    void init(uintptr_t aStart, size_t nSize);
 
     /// get available memory
-    size_t getFreeMemory();
+    size_t getFreeMemory() const;
 
     /// allocate a page
-    void *allocate(size_t nSize);
+    void *pageAllocate();
 
     /// free a page
-    void free(void *ptr);
+    void pageFree(void *ptr);
+private:
+    uint8_t *m_u8Head;
+    uint8_t *m_u8Tail;  
+
+    struct PageHeader
+    {
+        uint32_t m_u32PageMagic;
+        #define PAGE_MAGIC 0x07AF8F54
+        PageHeader *m_pNext;
+    } *m_pFreePages;
 };
 
 #endif  // PAGE_ALLOCATOR_H

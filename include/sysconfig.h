@@ -1,3 +1,11 @@
+/*
+ * sysconfig.h
+ *
+ * stcksmsh[github.com] - vukicevickosta@gmail.com
+ * 
+ * contains system configuration macros
+ */
+
 #ifndef SYSCONFIG_H
 #define SYSCONFIG_H
 

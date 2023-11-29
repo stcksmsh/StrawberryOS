@@ -1,16 +1,16 @@
+/*
+ *	heapAllocator.h
+ *
+ *  stcksmsh[github.com] - vukicevickosta@gmail.com
+ *
+ * 	Heap allocator class
+ */
+
 #ifndef heapAllocator_H
 #define heapAllocator_H
 
 #include <memorymap.h>
 #include <types.h>
-
-struct SimpleHeapHeader{
-    SimpleHeapHeader* pNext;
-    SimpleHeapHeader* pPrev;
-    size_t nSize;
-    uint32_t u32Magic;
-#define HEAP_BLOCK_MAGIC	0x424C4D43
-};
 
 class HeapAllocator{
 
@@ -35,9 +35,14 @@ public:
     void heapFree(void* pAddress);
 
 private:
-    
+    struct HeapBlockHeader{
+        HeapBlockHeader* pNext;
+        HeapBlockHeader* pPrev;
+        size_t nSize;
+        uint32_t u32Magic;
+    #define HEAP_BLOCK_MAGIC	0x19DAC0DE
+    } *m_pHead, *m_pTail;
     /// pointer to the start/end of the heap
-    SimpleHeapHeader *m_pHead, *m_pTail;
 };
 
 

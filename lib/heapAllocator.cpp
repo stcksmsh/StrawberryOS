@@ -15,9 +15,9 @@ void HeapAllocator::init(uintptr_t nStart, size_t nSize){
         m_pTail = 0;
         return;
     }
-    m_pHead = reinterpret_cast<SimpleHeapHeader*>(nStart);
+    m_pHead = reinterpret_cast<HeapBlockHeader*>(nStart);
     m_pHead->u32Magic = HEAP_BLOCK_MAGIC;
-    m_pHead->nSize = nSize - sizeof(SimpleHeapHeader);
+    m_pHead->nSize = nSize - sizeof(HeapBlockHeader);
     m_pHead->pNext = 0;
     m_pHead->pPrev = 0;
     m_pTail = m_pHead;
@@ -25,7 +25,7 @@ void HeapAllocator::init(uintptr_t nStart, size_t nSize){
 
 size_t HeapAllocator::getHeapFreeMemory(){
     size_t nFreeMemory = 0;
-    SimpleHeapHeader* pCurrent = m_pHead;
+    HeapBlockHeader* pCurrent = m_pHead;
     while(pCurrent != 0){
         assert(pCurrent->u32Magic == HEAP_BLOCK_MAGIC);
         nFreeMemory += pCurrent->nSize;
@@ -35,14 +35,14 @@ size_t HeapAllocator::getHeapFreeMemory(){
 }
 
 void* HeapAllocator::heapAllocate(size_t nSize){
-    SimpleHeapHeader* pCurrent = m_pHead;
+    HeapBlockHeader* pCurrent = m_pHead;
     while(pCurrent != 0){
         assert(pCurrent->u32Magic == HEAP_BLOCK_MAGIC);
         if(pCurrent->nSize >= nSize){
-            if(pCurrent->nSize > nSize + sizeof(SimpleHeapHeader)){
-                SimpleHeapHeader* pNewBlock = reinterpret_cast<SimpleHeapHeader*>(reinterpret_cast<size_t>(pCurrent) + sizeof(SimpleHeapHeader) + nSize);
+            if(pCurrent->nSize > nSize + sizeof(HeapBlockHeader)){
+                HeapBlockHeader* pNewBlock = reinterpret_cast<HeapBlockHeader*>(reinterpret_cast<size_t>(pCurrent) + sizeof(HeapBlockHeader) + nSize);
                 pNewBlock->u32Magic = HEAP_BLOCK_MAGIC;
-                pNewBlock->nSize = pCurrent->nSize - nSize - sizeof(SimpleHeapHeader);
+                pNewBlock->nSize = pCurrent->nSize - nSize - sizeof(HeapBlockHeader);
                 pNewBlock->pNext = pCurrent->pNext;
                 pCurrent->pNext = pNewBlock;
                 pCurrent->nSize = nSize;
@@ -59,7 +59,7 @@ void* HeapAllocator::heapAllocate(size_t nSize){
             if(pCurrent == m_pTail){
                 m_pTail = pCurrent->pPrev;
             }
-            return reinterpret_cast<void*>(reinterpret_cast<size_t>(pCurrent) + sizeof(SimpleHeapHeader));
+            return reinterpret_cast<void*>(reinterpret_cast<size_t>(pCurrent) + sizeof(HeapBlockHeader));
         }
         pCurrent = pCurrent->pNext;
     }
@@ -70,18 +70,18 @@ void* HeapAllocator::heapReallocate(void* pAddress, size_t nSize){
     if(m_pHead == 0){
         return 0;
     } 
-    SimpleHeapHeader *pCurrent = reinterpret_cast<SimpleHeapHeader*>(reinterpret_cast<uintptr_t>(pAddress) - sizeof(SimpleHeapHeader));
+    HeapBlockHeader *pCurrent = reinterpret_cast<HeapBlockHeader*>(reinterpret_cast<uintptr_t>(pAddress) - sizeof(HeapBlockHeader));
     assert(pCurrent->u32Magic == HEAP_BLOCK_MAGIC);
     
-    SimpleHeapHeader *pSearch = m_pHead;
+    HeapBlockHeader *pSearch = m_pHead;
     while(pSearch != 0 && pSearch < pCurrent){
         pSearch = pSearch -> pNext;
     }
 
-    if(pSearch != 0 && pCurrent + pCurrent -> nSize == pSearch && pCurrent -> nSize + pSearch -> nSize + sizeof(SimpleHeapHeader) >= nSize){
+    if(pSearch != 0 && pCurrent + pCurrent -> nSize == pSearch && pCurrent -> nSize + pSearch -> nSize + sizeof(HeapBlockHeader) >= nSize){
         size_t nBytesTaken = nSize - pCurrent -> nSize;
         pSearch -> nSize -= nBytesTaken;
-        SimpleHeapHeader *pNewBlock = reinterpret_cast<SimpleHeapHeader*>(reinterpret_cast<uintptr_t>(pSearch) + nBytesTaken);
+        HeapBlockHeader *pNewBlock = reinterpret_cast<HeapBlockHeader*>(reinterpret_cast<uintptr_t>(pSearch) + nBytesTaken);
         pNewBlock -> u32Magic = HEAP_BLOCK_MAGIC;
         pNewBlock -> nSize = pSearch -> nSize;
         pNewBlock -> pNext = pSearch -> pNext;
@@ -109,10 +109,10 @@ void HeapAllocator::heapFree(void* pAddress){
     if(m_pHead == 0){
         return;
     }
-    SimpleHeapHeader *pCurrent = reinterpret_cast<SimpleHeapHeader*>(reinterpret_cast<uintptr_t>(pAddress) - sizeof(SimpleHeapHeader));
+    HeapBlockHeader *pCurrent = reinterpret_cast<HeapBlockHeader*>(reinterpret_cast<uintptr_t>(pAddress) - sizeof(HeapBlockHeader));
     assert(pCurrent->u32Magic == HEAP_BLOCK_MAGIC);
     /// find the right place to insert
-    SimpleHeapHeader *pInsert = m_pHead;
+    HeapBlockHeader *pInsert = m_pHead;
     while(pInsert != 0 && pInsert < pCurrent){
         pInsert = pInsert -> pNext;
     }
@@ -138,7 +138,7 @@ void HeapAllocator::heapFree(void* pAddress){
     if(pCurrent -> pNext && 
         reinterpret_cast<size_t>(pCurrent) + pCurrent->nSize ==
         reinterpret_cast<size_t>(pCurrent -> pNext)){
-        pCurrent -> nSize += pCurrent -> pNext -> nSize + sizeof(SimpleHeapHeader);
+        pCurrent -> nSize += pCurrent -> pNext -> nSize + sizeof(HeapBlockHeader);
         pCurrent -> pNext = pCurrent -> pNext -> pNext;
         pCurrent -> pNext -> pPrev = pCurrent;
     }
@@ -147,7 +147,7 @@ void HeapAllocator::heapFree(void* pAddress){
     if(pCurrent -> pPrev &&
         reinterpret_cast<size_t>(pCurrent -> pPrev) + pCurrent -> pPrev -> nSize ==
         reinterpret_cast<size_t>(pCurrent)){
-        pCurrent -> pPrev -> nSize += pCurrent -> nSize + sizeof(SimpleHeapHeader);
+        pCurrent -> pPrev -> nSize += pCurrent -> nSize + sizeof(HeapBlockHeader);
         pCurrent -> pPrev -> pNext = pCurrent -> pNext;
         pCurrent -> pNext -> pPrev = pCurrent -> pPrev;
     }
@@ -155,5 +155,5 @@ void HeapAllocator::heapFree(void* pAddress){
     /// I seem to be losing memory somewhere
     /// it seems to happen on every allocation
     /// this stays untill i figure out why
-    pCurrent -> nSize += sizeof(SimpleHeapHeader);
+    pCurrent -> nSize += sizeof(HeapBlockHeader);
 }

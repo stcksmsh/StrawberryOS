@@ -1,3 +1,11 @@
+/*
+ *	exceptionHandler.h
+ *
+ *  stcksmsh[github.com] - vukicevickosta@gmail.com
+ *
+ * 	exception/interrupt handler function
+ */
+
 #ifndef EXCEPTION_HANDLER_H
 #define EXCEPTION_HANDLER_H
 

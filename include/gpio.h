@@ -1,3 +1,11 @@
+/*
+ *	gpio.h
+ *
+ *  stcksmsh[github.com] - vukicevickosta@gmail.com
+ *
+ * 	gpio related functions
+ */
+
 #ifndef GPIO_H
 #define GPIO_H
 
