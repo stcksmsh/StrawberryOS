@@ -6,7 +6,7 @@
 #include <machineinfo.h>
 
 Kernel::Kernel():
-    m_memoryManager(false)
+    m_memoryManager(true)
 {}
 
 Kernel::~Kernel()
@@ -234,6 +234,11 @@ KernelExitCode Kernel::init()
         uart.printHex(MemoryManager::getMemorySize());
         uart.putChar('\n');
     }
+
+    uint64_t nSCTLR_EL1;
+    asm volatile ("mrs %0, sctlr_el1" : "=r" (nSCTLR_EL1));
+    uart.printHex(nSCTLR_EL1);
+
     while (1)uart.update();
     return ShutdownNone;
 }

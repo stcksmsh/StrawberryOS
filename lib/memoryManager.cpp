@@ -23,6 +23,11 @@ MemoryManager::MemoryManager(bool bEnableMMU):
         memSizeHigh -= MEM_HIGHMEM_START;
     }
     m_HeapHigh.init(MEM_HIGHMEM_START, memSizeHigh);
+
+    if(m_bEnableMMU){
+        m_pTranslationTable.init(200 * MEGABYTE);
+        EnableMMU();
+    }
 }
 
 MemoryManager::~MemoryManager(){
@@ -63,6 +68,59 @@ void MemoryManager::heapFree(void* pMem)
 void MemoryManager::EnableMMU()
 {
     assert(m_bEnableMMU);
+
+    // Set MAIR
+    uint64_t mair = 0;
+    ///  see translationTable.h for more information on theses values
+    mair |= (ATTR_INDX_Normal(ATTR_INDX_Normal_policy(0b0,0b1,0b1,0b1), ATTR_INDX_Normal_policy(0b0,0b1,0b1,0b1)) << MAIR_NORMAL_WB * 8);
+    mair |= (ATTR_INDX_Device_nGnRE << MAIR_DEVICE_nGnRE * 8);
+    mair |= (ATTR_INDX_Device_nGnRnE << MAIR_DEVICE_nGnRnE * 8);
+    mair |= (ATTR_INDX_Normal(ATTR_INDX_Normal_policy(0b0,0b0,0b1,0b1), ATTR_INDX_Normal_policy(0b0,0b1,0b0,0b0)) << MAIR_NORMAL_WT * 8);
+    mair |= (ATTR_INDX_Normal(ATTR_INDX_Normal_policy(0b0,0b1,0b0,0b0), ATTR_INDX_Normal_policy(0b0,0b1,0b0,0b0)) << (MAIR_NORMAL_NC * 8));
+    
+    asm volatile("msr mair_el1, %0" : : "r"(mair)); 
+
+    /// set the translation table base address
+    assert(m_pInstance->m_pTranslationTable.getBaseAddress() != 0);
+    asm volatile("msr ttbr0_el1, %0" : : "r"(m_pInstance->m_pTranslationTable.getBaseAddress()));
+
+    /// set the translation control register
+    mmu_tcr tcr;
+    tcr.raw = 0;
+    /// make unprivileged access generate Level0 faults
+    tcr.tcr_eln.E0PD0 = 1;
+    /// set granularity to 4KB
+    tcr.tcr_eln.TG0 = 0b00;
+    /// make it inner-shareable
+    tcr.tcr_eln.SH0 = 0b11;
+    /// Outer - normal write-back, read-allocate, write-allocate cachable
+    tcr.tcr_eln.ORGN0 = 0b01;
+    /// Inner - normal write-back, read-allocate, write-allocate cachable
+    tcr.tcr_eln.IRGN0 = 0b01;
+    /// set Intermediate Physical Address Size to 36 bits
+    tcr.tcr_eln.IPS = 0b001;
+    /// size offset of memory region
+    tcr.tcr_eln.TOSZ = 28;
+
+    asm volatile("msr tcr_el1, %0" : : "r"(tcr.raw));
+    asm volatile("isb");
+
+#define SCTLR_EL1_WXN		(1 << 19)		// SCTLR_EL1
+#define SCTLR_EL1_I		(1 << 12)
+#define SCTLR_EL1_C		(1 << 2)
+#define SCTLR_EL1_A		(1 << 1)
+#define SCTLR_EL1_M		(1 << 0)
+
+
+    uint64_t nSCTLR_EL1;
+	asm volatile ("mrs %0, sctlr_el1" : "=r" (nSCTLR_EL1));
+	nSCTLR_EL1 &= ~(  SCTLR_EL1_WXN
+			| SCTLR_EL1_A);
+	nSCTLR_EL1 |=   SCTLR_EL1_I
+		      | SCTLR_EL1_C
+		      | SCTLR_EL1_M;
+	// asm volatile ("msr sctlr_el1, %0" : : "r" (nSCTLR_EL1));
+    // asm volatile("isb");
 }
 
 void *MemoryManager::getCoherentPage(uint8_t u8Slot)

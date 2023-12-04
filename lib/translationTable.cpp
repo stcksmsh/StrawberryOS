@@ -5,14 +5,25 @@
 #include <memorymap.h>
 
 
-TranslationTable::TranslationTable(size_t nSize): 
-    m_nMemSize(nSize),
-    m_pTable(0)
+TranslationTable::TranslationTable(){}
+
+
+void TranslationTable::init(size_t nSize)
 {
     /// Allocate memory for the L0 table and zero it
-    m_pTable = (L0_TABLE_DESCRIPTOR *)palloc();
+    m_pTable = (L1_TABLE_DESCRIPTOR *)palloc();
     assert(m_pTable != 0);
     memset(m_pTable, 0, PAGE_SIZE);
+    for( int i = 0; i < 100; i ++){
+        m_pTable->Valid = 1;
+        m_pTable->Type = 1;
+        m_pTable->TableAddr = (uintptr_t)createL2Table(i * 2 * MEGABYTE) >> 12;
+        m_pTable->PXNTable = 0;
+        m_pTable->UXNTable = 0;
+        m_pTable->APTable = 0b00;
+        m_pTable->NSTable = 0;
+        m_pTable ++;
+    }
 
     // /// Invalidate all entries
     // for(int entry = 0; entry < MMU_TABLE_ENTRIES; entry++)
@@ -20,6 +31,7 @@ TranslationTable::TranslationTable(size_t nSize):
     //     m_pTable[entry].Valid = 0;
     // }
 }
+
 
 TranslationTable::~TranslationTable()
 {
@@ -58,29 +70,21 @@ uintptr_t TranslationTable::getBaseAddress() const
 }
 
 
-L1_DESCRIPTOR *TranslationTable::createL1Table(uintptr_t nBaseAddress)
-{
-    /// Allocate memory for the L1 table and zero it
-    L1_DESCRIPTOR *pL1Desc = (L1_DESCRIPTOR *)palloc();
-    assert(pL1Desc != 0);
-    memset(pL1Desc, 0, PAGE_SIZE);
-    // L1_TABLE_DESCRIPTOR *pL1Table = &pL1Desc->Table;
-
-    // /// Invalidate all entries
-    // for(int entry = 0; entry < MMU_TABLE_ENTRIES; entry++)
-    // {
-    //     pL1Table[entry].Valid = 0;
-    // }
-
-    return pL1Desc;
-}
-
 L2_DESCRIPTOR *TranslationTable::createL2Table(uintptr_t nBaseAddress)
 {
     /// Allocate memory for the L2 table and zero it
     L2_DESCRIPTOR *pL2Desc = (L2_DESCRIPTOR *)palloc();
     assert(pL2Desc != 0);
     memset(pL2Desc, 0, PAGE_SIZE);
+
+    L2_BLOCK_DESCRIPTOR *pL2Block = &pL2Desc->Block;
+    pL2Block->Valid = 1;
+    pL2Block->Type = 0;
+    pL2Block->MemAttr = MAIR_NORMAL_WB;
+    pL2Block->S2AP = 0b00;
+    pL2Block->OutputAddr = nBaseAddress >> 12;
+
+
     // L2_TABLE_DESCRIPTOR *pL2Table = &pL2Desc->Table;
 
     // for(int entry = 0; entry < MMU_TABLE_ENTRIES; entry++)

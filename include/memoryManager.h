@@ -58,7 +58,7 @@ private:
     PageAllocator m_Pager;
 
     /// translation table
-    TranslationTable *m_pTranslationTable;
+    TranslationTable m_pTranslationTable;
     
     /// singleton instance
     static MemoryManager *m_pInstance;
