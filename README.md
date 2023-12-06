@@ -17,6 +17,13 @@ Currently the only features that work are:
 - the Video Core mailbox for retrieving machine information such as the revision number, burned-in MAC address etc.
 - simple heap allocation
 
+### Current priorities
+
+I am currently focusing most of my efforts on:
+
+- the virtual address space and utilizing the MMU
+- interrupt handling and system calls
+
 ## Documentation
 
 I have created several `.md` documentation files in the `doc/` folder, 
@@ -35,6 +42,6 @@ Please make sure to update tests as appropriate.
 
 [MIT][License-link]
 
-[Line-badge]: https://img.shields.io/badge/Lines-3.78k-f89820?style=for-the-badge
+[Line-badge]: https://img.shields.io/badge/Lines-3.83k-f89820?style=for-the-badge
 [License-badge]: https://img.shields.io/badge/License-MIT-04a635?style=for-the-badge
 [License-link]: https://opensource.org/licenses/MIT

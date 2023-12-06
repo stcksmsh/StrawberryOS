@@ -1,6 +1,8 @@
+ExceptionHandler - Handles exceptions, that includes synchronous exceptions, system errors as well as non implemented exceptions
 ExceptionHandler - Handles exceptions, used in vector.S
 FrameBuffer - Currently not implemented
 HeapAllocator - Handles a heap, allocating, reallocating and freeing memory from it, the method `init` must be called to set it up
+InterruptHandler - Handles interrupts (IRQs)
 Kernel - The '*main*' class of the OS, handles everything aside from bootstrapping and system initialisation
 MachineInfo - Used to fetch and store data on the host machine from the VideoCore (see mailbox)
 Mailbox - Used to interface with the mailboxes present on the machine, see [maillbox.md](mailbox.md)
