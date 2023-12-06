@@ -1,11 +1,13 @@
 #include <exceptionHandler.h>
+#include <interruptHandler.h>
 
-void ExceptionHandler (uint64_t nException, TAbortFrame *pFrame)
+void HandleException (uint64_t nException, TAbortFrame *pFrame)
 {
-    /// DO SOMETHING   
+    /// just HANG for now
+    __asm__ volatile ("b HandleException");
 }
 
-void InterruptHandler (void)
+void HandleInterrupt (void)
 {
-    /// DO SOMETHING       
+    InterruptHandler::Handle();
 }

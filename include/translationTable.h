@@ -25,6 +25,10 @@
 /// ATTR_INDX_Normal(ATTR_INDX_Normal_policy(0b0,0b1,0b0,0b0), ATTR_INDX_Normal_policy(0b0,0b1,0b0,0b0))
 
 
+#define ATTRINDX_NORMAL MAIR_NORMAL_WB
+#define ATTRINDX_DEVICE MAIR_DEVICE_nGnRE
+#define ATTRINDX_COHERENT MAIR_DEVICE_nGnRnE
+
 class TranslationTable
 {
 public:

@@ -71,7 +71,7 @@ _start:
 		add	x0, x0, x1
 		mov	sp, x0			/* init its stack */
 
-		ldr	x0, =VectorTable	/* init exception vector table */
+		ldr	x0, =VectorTable	/* init EL1 exception vector table */
 		msr	vbar_el1, x0
 
 		b	_Z7sysinitv

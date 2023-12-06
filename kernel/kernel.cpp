@@ -6,11 +6,18 @@
 #include <machineinfo.h>
 
 Kernel::Kernel():
-    m_memoryManager(true)
+    m_memoryManager(false), /// DONT USE MMU FOR NOW, IT'S NOT WORKING
+    m_interruptHandler()
 {}
 
 Kernel::~Kernel()
 {}
+
+void timerPrint(void *pParam)
+{
+    MiniUART uart = MiniUART();
+    uart.putChar('T');
+}
 
 KernelExitCode Kernel::init()
 {
@@ -27,6 +34,7 @@ KernelExitCode Kernel::init()
     bool intro = true;
     bool heapTest = true;
     bool memTestHeap = true;
+    bool timerTest = true;
     /// block containing init messages:
     /// ASCII art, machine info and device power states
     if(intro){
@@ -238,6 +246,12 @@ KernelExitCode Kernel::init()
     uint64_t nSCTLR_EL1;
     asm volatile ("mrs %0, sctlr_el1" : "=r" (nSCTLR_EL1));
     uart.printHex(nSCTLR_EL1);
+
+    /// testing timer
+    if(timerTest){
+        InterruptHandler::RegisterIRQ(IRQ_TIMER_0, timerPrint, 0);
+        InterruptHandler::EnableIRQ(IRQ_TIMER_0);
+    }
 
     while (1)uart.update();
     return ShutdownNone;

@@ -122,18 +122,72 @@
 //
 // Interrupt Controller
 //
-#define ARM_IC_BASE		(ARM_IO_BASE + 0xB000)
+/// BCM2711-peripherals.pdf, page 100
 
-#define ARM_IC_IRQ_BASIC_PENDING  (ARM_IC_BASE + 0x200)
-#define ARM_IC_IRQ_PENDING_1	  (ARM_IC_BASE + 0x204)
-#define ARM_IC_IRQ_PENDING_2	  (ARM_IC_BASE + 0x208)
-#define ARM_IC_FIQ_CONTROL	  (ARM_IC_BASE + 0x20C)
-#define ARM_IC_ENABLE_IRQS_1	  (ARM_IC_BASE + 0x210)
-#define ARM_IC_ENABLE_IRQS_2	  (ARM_IC_BASE + 0x214)
-#define ARM_IC_ENABLE_BASIC_IRQS  (ARM_IC_BASE + 0x218)
-#define ARM_IC_DISABLE_IRQS_1	  (ARM_IC_BASE + 0x21C)
-#define ARM_IC_DISABLE_IRQS_2	  (ARM_IC_BASE + 0x220)
-#define ARM_IC_DISABLE_BASIC_IRQS (ARM_IC_BASE + 0x224)
+#define ARMC_BASE			(ARM_IO_BASE + 0xB000)
+/// first the IRQs
+#define IRQ0_PENDING0 		(ARMC_BASE + 0x200) /// interrupts 0..31 from interrupt.h
+#define IRQ0_PENDING1 		(ARMC_BASE + 0x204) /// interrupts 32..63 from interrupt.h
+/*
+ *	bit 25 is the OR of interrupts 63..32, if set then read PENDING_1
+ *	bit 24 is the OR of interrupts 31..0, if set then read PENDING_0
+ */
+#define IRQ0_PENDING2 		(ARMC_BASE + 0x208)
+#define IRQ0_SET_EN_0 		(ARMC_BASE + 0x210)
+#define IRQ0_SET_EN_1 		(ARMC_BASE + 0x214)
+#define IRQ0_SET_EN_2 		(ARMC_BASE + 0x218)
+#define IRQ0_CLR_EN_0 		(ARMC_BASE + 0x220)
+#define IRQ0_CLR_EN_1 		(ARMC_BASE + 0x224)
+#define IRQ0_CLR_EN_2 		(ARMC_BASE + 0x228)
+
+#define IRQ_STATUS0 		(ARMC_BASE + 0x230)
+#define IRQ_STATUS1 		(ARMC_BASE + 0x234)
+#define IRQ_STATUS2 		(ARMC_BASE + 0x238)
+
+#define IRQ1_PENDING0 		(ARMC_BASE + 0x240)
+#define IRQ1_PENDING1 		(ARMC_BASE + 0x244)
+#define IRQ1_PENDING2 		(ARMC_BASE + 0x248)
+#define IRQ1_SET_EN_0 		(ARMC_BASE + 0x250)
+#define IRQ1_SET_EN_1 		(ARMC_BASE + 0x254)
+#define IRQ1_SET_EN_2 		(ARMC_BASE + 0x258)
+#define IRQ1_CLR_EN_0 		(ARMC_BASE + 0x260)
+#define IRQ1_CLR_EN_1 		(ARMC_BASE + 0x264)
+#define IRQ1_CLR_EN_2 		(ARMC_BASE + 0x268)
+
+#define IRQ2_PENDING0 		(ARMC_BASE + 0x280)
+#define IRQ2_PENDING1 		(ARMC_BASE + 0x284)
+#define IRQ2_PENDING2 		(ARMC_BASE + 0x288)
+#define IRQ2_SET_EN_0 		(ARMC_BASE + 0x290)
+#define IRQ2_SET_EN_1 		(ARMC_BASE + 0x294)
+#define IRQ2_SET_EN_2 		(ARMC_BASE + 0x298)
+#define IRQ2_CLR_EN_0 		(ARMC_BASE + 0x2A0)
+#define IRQ2_CLR_EN_1 		(ARMC_BASE + 0x2A4)
+#define IRQ2_CLR_EN_2 		(ARMC_BASE + 0x2A8)
+
+#define IRQ3_PENDING0 		(ARMC_BASE + 0x2C0)
+#define IRQ3_PENDING1 		(ARMC_BASE + 0x2C4)
+#define IRQ3_PENDING2 		(ARMC_BASE + 0x2C8)
+#define IRQ3_SET_EN_0 		(ARMC_BASE + 0x2D0)
+#define IRQ3_SET_EN_1 		(ARMC_BASE + 0x2D4)
+#define IRQ3_SET_EN_2 		(ARMC_BASE + 0x2D8)
+#define IRQ3_CLR_EN_0 		(ARMC_BASE + 0x2E0)
+#define IRQ3_CLR_EN_1 		(ARMC_BASE + 0x2E4)
+#define IRQ3_CLR_EN_2 		(ARMC_BASE + 0x2E8)
+
+/// then the FIQs, not used so far, so not many defines
+#define FIQ0_PENDING0 		(ARMC_BASE + 0x300)
+#define FIQ0_PENDING1 		(ARMC_BASE + 0x304)
+#define FIQ0_PENDING2 		(ARMC_BASE + 0x308)
+#define FIQ0_SET_EN_0 		(ARMC_BASE + 0x310)
+#define FIQ0_SET_EN_1 		(ARMC_BASE + 0x314)
+#define FIQ0_SET_EN_2 		(ARMC_BASE + 0x318)
+#define FIQ0_CLR_EN_0 		(ARMC_BASE + 0x320)
+#define FIQ0_CLR_EN_1 		(ARMC_BASE + 0x324)
+#define FIQ0_CLR_EN_2 		(ARMC_BASE + 0x328)
+///... and so on
+
+#define SWIRQ_SET 			(ARMC_BASE + 0x3f0)
+#define SWIRQ_CLR 			(ARMC_BASE + 0x3f4)
 
 //
 // ARM Timer

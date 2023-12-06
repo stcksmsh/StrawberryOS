@@ -3,7 +3,7 @@
  *
  *  stcksmsh[github.com] - vukicevickosta@gmail.com
  *
- * 	exception/interrupt handler function
+ * 	exception/interrupt handler functions
  */
 
 #ifndef EXCEPTION_HANDLER_H
@@ -23,8 +23,18 @@ struct __attribute__ ((packed)) TAbortFrame
 };
 
 extern "C"{
-    void ExceptionHandler (uint64_t u64Exception, TAbortFrame *pFrame);
-    void InterruptHandler (void);
+    void HandleException (uint64_t u64Exception, TAbortFrame *pFrame);
+    void HandleInterrupt (void);
+};
+
+
+class ExceptionHandler
+{
+public:
+    ExceptionHandler();
+    ~ExceptionHandler();
+
+    void hrow(uint64_t nException, TAbortFrame *pFrame);
 };
 
 

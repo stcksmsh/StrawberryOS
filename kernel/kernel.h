@@ -11,6 +11,7 @@
 #define KERNEL_H
 
 #include <memoryManager.h>
+#include <interruptHandler.h>
 
 enum KernelExitCode{
     ShutdownNone,
@@ -31,6 +32,7 @@ public:
 
 private:
     MemoryManager m_memoryManager;
+    InterruptHandler m_interruptHandler;
 };
 
 #endif  // KERNEL_H

@@ -72,11 +72,14 @@ void MemoryManager::EnableMMU()
     // Set MAIR
     uint64_t mair = 0;
     ///  see translationTable.h for more information on theses values
-    mair |= (ATTR_INDX_Normal(ATTR_INDX_Normal_policy(0b0,0b1,0b1,0b1), ATTR_INDX_Normal_policy(0b0,0b1,0b1,0b1)) << MAIR_NORMAL_WB * 8);
-    mair |= (ATTR_INDX_Device_nGnRE << MAIR_DEVICE_nGnRE * 8);
-    mair |= (ATTR_INDX_Device_nGnRnE << MAIR_DEVICE_nGnRnE * 8);
-    mair |= (ATTR_INDX_Normal(ATTR_INDX_Normal_policy(0b0,0b0,0b1,0b1), ATTR_INDX_Normal_policy(0b0,0b1,0b0,0b0)) << MAIR_NORMAL_WT * 8);
-    mair |= (ATTR_INDX_Normal(ATTR_INDX_Normal_policy(0b0,0b1,0b0,0b0), ATTR_INDX_Normal_policy(0b0,0b1,0b0,0b0)) << (MAIR_NORMAL_NC * 8));
+    mair |= (ATTR_INDX_Normal(ATTR_INDX_Normal_policy(0b0,0b1,0b1,0b1), ATTR_INDX_Normal_policy(0b0,0b1,0b1,0b1)) \
+            << MAIR_NORMAL_WB * 8); /// inner/outer write-back, non-transient, allocating
+    mair |= (ATTR_INDX_Device_nGnRE << MAIR_DEVICE_nGnRE * 8); /// non-gathering, non-reordering, early-acknowledgement
+    mair |= (ATTR_INDX_Device_nGnRnE << MAIR_DEVICE_nGnRnE * 8); /// non-gathering, non-reordering, non-early-acknowledgement
+    mair |= (ATTR_INDX_Normal(ATTR_INDX_Normal_policy(0b0,0b0,0b1,0b1), ATTR_INDX_Normal_policy(0b0,0b1,0b0,0b0)) \
+            << MAIR_NORMAL_WT * 8);/// inner/outer write-through, non-transient, allocating
+    mair |= (ATTR_INDX_Normal(ATTR_INDX_Normal_policy(0b0,0b1,0b0,0b0), ATTR_INDX_Normal_policy(0b0,0b1,0b0,0b0)) \
+            << (MAIR_NORMAL_NC * 8)); /// inner/outer non-cacheable
     
     asm volatile("msr mair_el1, %0" : : "r"(mair)); 
 
