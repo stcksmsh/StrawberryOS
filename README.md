@@ -26,10 +26,7 @@ I am currently focusing most of my efforts on:
 
 ## Documentation
 
-I have created several `.md` documentation files in the `doc/` folder, 
-> - Information on [notation](./docs/notation.md)
-> - Short explanation of all the [classes](./docs/classes.md)
-> - Some information on [mailboxes](./docs/mailbox.md)
+I have created several markdown documentation files in the [docs/ folder](./docs/)
 
 ## Contributing
 
