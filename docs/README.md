@@ -7,3 +7,4 @@
 > - The [classes](classes.md) comprising the OS
 > - The [mailbox](mailbox.md) peripheral
 > - How [virtual memory](virtual_memory.md) is used in the OS
+> - Information on [exceptions](exceptions.md) and how I handle them

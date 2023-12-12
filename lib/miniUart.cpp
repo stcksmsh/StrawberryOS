@@ -127,7 +127,6 @@ char MiniUART::readChar() {
 // }
 
 void MiniUART::update(){
-    loadOutputQueue();
     if (isReadByteReady()) {
        char ch = readChar();
        if (ch == '\r') putChar('\n');

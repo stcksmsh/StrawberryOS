@@ -24,11 +24,16 @@ void sysinit(){
     int exitValue = 0;
     asm volatile ("mov %0, x0" : "=r"(exitValue));
     MiniUART uart = MiniUART();
+    uart.putChar('\n');
+    uart.putChar('\n');
+    uart.putChar('\n');
     uart.putChar('0' + exitValue);
     // Call destructors of static objects
     extern void (*__fini_start)(void);    
     extern void (*__fini_end)(void);
     for(void (**pFunc)(void) = &__fini_start; pFunc < &__fini_end; pFunc++)
         (**pFunc)();
-    asm volatile("wfi");
+    while(1){
+        asm volatile("wfi");
+    }
 }

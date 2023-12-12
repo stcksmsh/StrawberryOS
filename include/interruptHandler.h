@@ -27,6 +27,7 @@ private:
 
     InterruptHandler();
 
+static void *m_pParams[IRQ_LINES];         
 static IRQ_handler *m_pIRQHandlers[IRQ_LINES];
 static InterruptHandler *m_pInstance;
 

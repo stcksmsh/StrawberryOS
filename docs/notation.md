@@ -1,4 +1,4 @@
-##### ### Description of notation
+#### Description of notation
 
 Im using a sort of system [hungarian notation](https://en.wikipedia.org/wiki/Hungarian_notation)
 

@@ -5,6 +5,7 @@
 #include <sysconfig.h>
 #include <machineinfo.h>
 #include <assert.h>
+#include <bcm2711.h>
 
 Kernel *Kernel::m_pInstance = 0;
 
@@ -23,9 +24,18 @@ Kernel::~Kernel()
 
 void timerPrint(void *pParam)
 {
-    MiniUART m_miniUART = MiniUART();
-    m_miniUART.putChar('T');
+    MiniUART *m_miniUART = reinterpret_cast<MiniUART*>(pParam);
+    m_miniUART->putChar('T');
 }
+
+void timerInit(){
+    MiniUART m_miniUART = MiniUART();
+    uint64_t time = mmioRead(ARM_SYSTIMER_CLO);
+    m_miniUART.printHex(time);
+    m_miniUART.putChar('\n');
+    mmioWrite(ARM_SYSTIMER_C0, mmioRead(ARM_SYSTIMER_CLO) + 1000000);
+}
+
 
 KernelExitCode Kernel::init()
 {
@@ -37,11 +47,10 @@ KernelExitCode Kernel::init()
 
     m_miniUART.init();
 
-    // m_memoryManager = MemoryManager(false);
-    bool intro = true;
-    bool heapTest = true;
-    bool memTestHeap = true;
-    bool sysCallTest = true;
+    bool intro = false;
+    bool heapTest = false;
+    bool memTestHeap = false;
+    bool sysCallTest = false;
     bool timerTest = true;
     /// block containing init messages:
     /// ASCII art, machine info and device power states
@@ -184,6 +193,8 @@ KernelExitCode Kernel::init()
             m_miniUART << (char*)"SPI:" << (char*)(mb.readBuff(6) & 0x1 ? "on, " : "off, ")  << (char*)(mb.readBuff(6) & 0x2 ? "doesn't exist" : "exists") << '\n';
             m_miniUART << (char*)"CCP2TX:" << (char*)(mb.readBuff(6) & 0x1 ? "on, " : "off, ")  << (char*)(mb.readBuff(6) & 0x2 ? "doesn't exist" : "exists") << '\n';
         }
+        m_miniUART << (char*)"----------------------------------------";
+        m_miniUART.putChar('\n');
     }
 
     /// testing heap allocator
@@ -217,6 +228,8 @@ KernelExitCode Kernel::init()
         m_miniUART << (char*)"Free memory: ";
         m_miniUART.printHex(heap.getHeapFreeMemory());
         m_miniUART.putChar('\n');
+        m_miniUART << (char*)"----------------------------------------";
+        m_miniUART.putChar('\n');
     }
 
     /// testing memory manager, just the heap stuff
@@ -249,21 +262,32 @@ KernelExitCode Kernel::init()
         m_miniUART << (char*)"Free memory: ";
         m_miniUART.printHex(MemoryManager::getMemorySize());
         m_miniUART.putChar('\n');
+        m_miniUART << (char*)"----------------------------------------";
+        m_miniUART.putChar('\n');
     }
 
     uint64_t nSCTLR_EL1;
     asm volatile ("mrs %0, sctlr_el1" : "=r" (nSCTLR_EL1));
     m_miniUART.printHex(nSCTLR_EL1);
+    m_miniUART.putChar('\n');
+    m_miniUART << (char*)"----------------------------------------";
+    m_miniUART.putChar('\n');
 
     /// testing system calls
     if(sysCallTest){
         __asm__ volatile("svc #0");
+        __asm__ volatile("svc #352");
+        __asm__ volatile("svc #12");
+        m_miniUART << (char*)"----------------------------------------";
+        m_miniUART.putChar('\n');
     }
 
     /// testing timer
     if(timerTest){
-        InterruptHandler::RegisterIRQ(IRQ_TIMER_0, timerPrint, 0);
+        timerInit();
+        InterruptHandler::RegisterIRQ(IRQ_TIMER_0, timerPrint, &m_miniUART);
         InterruptHandler::EnableIRQ(IRQ_TIMER_0);
+        __asm__ volatile ("msr daifclr, #2");
     }
 
     while (1)m_miniUART.update();

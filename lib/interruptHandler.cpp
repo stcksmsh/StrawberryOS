@@ -14,6 +14,7 @@
 
 InterruptHandler *InterruptHandler::m_pInstance = 0;
 IRQ_handler *InterruptHandler::m_pIRQHandlers[IRQ_LINES] = {0};
+void *InterruptHandler::m_pParams[IRQ_LINES] = {0};
 
 InterruptHandler::InterruptHandler()
 {
@@ -40,7 +41,7 @@ void InterruptHandler::Handle()
             {
                 if(m_pIRQHandlers[i] != 0)
                 {
-                    m_pIRQHandlers[i](0);
+                    m_pIRQHandlers[i](m_pParams[i]);
                 }
                 else
                 {
@@ -75,6 +76,7 @@ void InterruptHandler::RegisterIRQ(uint8_t nIRQ, IRQ_handler *pHandler, void *pP
 {
     assert(nIRQ < IRQ_LINES);
     m_pIRQHandlers[nIRQ] = pHandler;
+    m_pParams[nIRQ] = pParam;
 }
 
 void InterruptHandler::UnregisterIRQ(uint8_t nIRQ)
