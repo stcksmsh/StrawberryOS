@@ -6,6 +6,7 @@
 #include <machineinfo.h>
 #include <assert.h>
 #include <bcm2711.h>
+#include <interrupt.h>
 
 Kernel *Kernel::m_pInstance = 0;
 
@@ -26,14 +27,19 @@ void timerPrint(void *pParam)
 {
     MiniUART *m_miniUART = reinterpret_cast<MiniUART*>(pParam);
     m_miniUART->putChar('T');
+    mmioWrite(ARM_SYSTIMER_C0, mmioRead(ARM_SYSTIMER_CLO) + 1000000);
+    regSet(ARM_SYSTIMER_CS, 1, 1, IRQ_TIMER_0);
 }
 
 void timerInit(){
+    regSet(IRQ0_SET_EN_0, 1, 1, IRQ_TIMER_0); 
+    __asm__ volatile ("msr daifclr, #2");
     MiniUART m_miniUART = MiniUART();
     uint64_t time = mmioRead(ARM_SYSTIMER_CLO);
     m_miniUART.printHex(time);
     m_miniUART.putChar('\n');
     mmioWrite(ARM_SYSTIMER_C0, mmioRead(ARM_SYSTIMER_CLO) + 1000000);
+    regSet(ARM_SYSTIMER_CS, 1, 1, IRQ_TIMER_0);
 }
 
 
@@ -284,10 +290,9 @@ KernelExitCode Kernel::init()
 
     /// testing timer
     if(timerTest){
-        timerInit();
         InterruptHandler::RegisterIRQ(IRQ_TIMER_0, timerPrint, &m_miniUART);
         InterruptHandler::EnableIRQ(IRQ_TIMER_0);
-        __asm__ volatile ("msr daifclr, #2");
+        timerInit();
     }
 
     while (1)m_miniUART.update();

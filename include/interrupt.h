@@ -84,5 +84,16 @@
 #define IRQ_EMMC_and_EMMC2      62
 #define IRQ_ETH_PCIe_secure     63
 
+#define GICD_BASE 0xff841000
+#define GICD_CTRLR 		(GICD_BASE + 0x0)
+#define GICD_ISENABLER 	(GICD_BASE + 0x100)
+#define GICD_ICENABLER  (GICD_BASE + 0x180)
+#define GICD_ITARGETSR 	(GICD_BASE + 0x800)
+
+#define GICC_BASE 0xff842000
+#define GICC_CTRLR 		(GICC_BASE + 0x0)
+#define GICC_PMR 		(GICC_BASE + 0x4)
+#define GICC_IAR 		(GICC_BASE + 0xC)
+#define GICC_EOIR 		(GICC_BASE + 0x10)
 
 #endif // INTERRUPT_H

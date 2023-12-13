@@ -18,6 +18,7 @@ ARMSTUB_LST = ${ARMSTUB}.lst
 ARMSTUB_S = ${ARMSTUB}.S
 ARMSTUB_OBJ = ${ARMSTUB}.o
 
+
 # the prefix for all the build tools
 PREFIX = /usr/local/cross
 TOOL_PREFIX = ${PREFIX}/bin/aarch64-elf-
@@ -121,7 +122,7 @@ DEP_FILES = $(OBJ_FILES:%.o=%.d)
 -include $(DEP_FILES)
 
 ${ARMSTUB_BIN}: ${ARMSTUB_S}
-	@echo "AS ${<}..."
+	@echo "AS ${ARMSTUB_S}..."
 	@${AS} ${ASFLAGS} -c ${ARMSTUB_S} -o ${ARMSTUB_OBJ}
 	@${LD} --section-start=.text=0 -o ${ARMSTUB_ELF} ${ARMSTUB_OBJ}
 	@${OBJDUMP} -D ${ARMSTUB_ELF} > ${ARMSTUB_LST}

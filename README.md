@@ -39,6 +39,6 @@ Please make sure to update tests as appropriate.
 
 [MIT][License-link]
 
-[Line-badge]: https://img.shields.io/badge/Lines-3.89k-f89820?style=for-the-badge
+[Line-badge]: https://img.shields.io/badge/Lines-3.92k-f89820?style=for-the-badge
 [License-badge]: https://img.shields.io/badge/License-MIT-04a635?style=for-the-badge
 [License-link]: https://opensource.org/licenses/MIT

@@ -41,6 +41,7 @@ private:
     static Kernel *m_pInstance;
 
     friend class ExceptionHandler;
+    friend class InterruptHandler;
 };
 
 #endif  // KERNEL_H

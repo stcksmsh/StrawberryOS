@@ -19,17 +19,19 @@ class InterruptHandler
 {
 public:
     static void Handle();
-    static void RegisterIRQ(uint8_t nIRQ, IRQ_handler *pHandler, void *pParam);
-    static void UnregisterIRQ(uint8_t nIRQ);
-    static void EnableIRQ(uint8_t nIRQ);
-    static void DisableIRQ(uint8_t nIRQ);
+    static void RegisterIRQ(size_t nIRQ, IRQ_handler *pHandler, void *pParam);
+    static void UnregisterIRQ(size_t nIRQ);
+    static void EnableIRQ(size_t nIRQ, size_t nCpuId = 0);
+    static void DisableIRQ(size_t nIRQ);
 private:
 
     InterruptHandler();
 
-static void *m_pParams[IRQ_LINES];         
-static IRQ_handler *m_pIRQHandlers[IRQ_LINES];
-static InterruptHandler *m_pInstance;
+    void InitializeGIC();
+
+    static void *m_pParams[IRQ_LINES];         
+    static IRQ_handler *m_pIRQHandlers[IRQ_LINES];
+    static InterruptHandler *m_pInstance;
 
 friend class Kernel;
 };
