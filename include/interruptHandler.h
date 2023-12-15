@@ -22,18 +22,21 @@ public:
     static void RegisterIRQ(size_t nIRQ, IRQ_handler *pHandler, void *pParam);
     static void UnregisterIRQ(size_t nIRQ);
     static void EnableIRQ(size_t nIRQ, size_t nCpuId = 0);
-    static void DisableIRQ(size_t nIRQ);
+    static void DisableIRQ(size_t nIRQ, size_t nCpuId = 0);
+
+    static void EnableIRQs();
+    static void DisableIRQs();
+
 private:
 
     InterruptHandler();
 
-    void InitializeGIC();
 
     static void *m_pParams[IRQ_LINES];         
     static IRQ_handler *m_pIRQHandlers[IRQ_LINES];
     static InterruptHandler *m_pInstance;
 
-friend class Kernel;
+    friend class Kernel;
 };
 
 #endif // INTERRUPT_HANDLER_H

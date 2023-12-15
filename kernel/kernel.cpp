@@ -18,6 +18,7 @@ Kernel::Kernel():
 {
     assert(m_pInstance == 0);
     m_pInstance = this;
+    m_miniUART.init();
 }
 
 Kernel::~Kernel()
@@ -32,8 +33,6 @@ void timerPrint(void *pParam)
 }
 
 void timerInit(){
-    regSet(IRQ0_SET_EN_0, 1, 1, IRQ_TIMER_0); 
-    __asm__ volatile ("msr daifclr, #2");
     MiniUART m_miniUART = MiniUART();
     uint64_t time = mmioRead(ARM_SYSTIMER_CLO);
     m_miniUART.printHex(time);
@@ -41,7 +40,6 @@ void timerInit(){
     mmioWrite(ARM_SYSTIMER_C0, mmioRead(ARM_SYSTIMER_CLO) + 1000000);
     regSet(ARM_SYSTIMER_CS, 1, 1, IRQ_TIMER_0);
 }
-
 
 KernelExitCode Kernel::init()
 {
@@ -51,12 +49,10 @@ KernelExitCode Kernel::init()
         return ShutdownHalt;
     }
 
-    m_miniUART.init();
-
-    bool intro = false;
+    bool intro = true;
     bool heapTest = false;
     bool memTestHeap = false;
-    bool sysCallTest = false;
+    bool sysCallTest = true;
     bool timerTest = true;
     /// block containing init messages:
     /// ASCII art, machine info and device power states
@@ -290,8 +286,10 @@ KernelExitCode Kernel::init()
 
     /// testing timer
     if(timerTest){
+
         InterruptHandler::RegisterIRQ(IRQ_TIMER_0, timerPrint, &m_miniUART);
         InterruptHandler::EnableIRQ(IRQ_TIMER_0);
+        InterruptHandler::EnableIRQs();
         timerInit();
     }
 

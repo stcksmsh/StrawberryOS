@@ -27,18 +27,50 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+
+#define GICD_BASE 0xff841000
+#define GICD_CTRLR 		0x0
+#define GICD_TYPER      0x4
+#define GICD_IIDR 		0x8
+#define GICD_IGROUPR 	0x80
+#define GICD_ISENABLER 	0x100
+#define GICD_ICENABLER  0x180
+#define GICD_ISPENDR 	0x200
+#define GICD_ICPENDR 	0x280
+#define GICD_ISACTIVER 	0x300
+#define GICD_ICACTIVER 	0x380
+#define GICD_IPRIORITYR 0x400
+#define GICD_ITARGETSR 	0x800
+#define GICD_ICFGR 		0xC00
+#define GICD_PPISR 		0xD00
+#define GICD_SPISR 		0xD04
+#define GICD_SGIR 		0xF00
+#define GICD_CPENDSGIR 	0xF10
+#define GICD_SPENDSGIR 	0xF20
+
+#define GICC_BASE 0xff842000
+#define GICC_CTRLR 		0x0
+#define GICC_PMR 		0x4
+#define GICC_BPR 		0x8
+#define GICC_IAR 		0xC
+#define GICC_EOIR 		0x10
+#define GICC_RPR 		0x14
+#define GICC_HPPIR 		0x18
+#define GICC_ABPR 		0x1C
+#define GICC_AIAR 		0x20
+#define GICC_AEOIR 		0x24
+#define GICC_AHPPIR 	0x28
+#define GICC_APR0 		0xD0
+#define GICC_NSAPR0 	0xE0
+#define GICC_IIDR 		0xFC
+#define GIC_DIR 		0x1000
+// taken from include/interrupt.h
+
 #define BIT(x) (1 << (x))
 
 #define LOCAL_CONTROL		0xff800000
 #define LOCAL_PRESCALER		0xff800008
 
-#define GIC_DISTB		0xff841000
-#define GIC_CPUB		0xff842000
-#define GICC_CTRLR	0x0
-#define GICC_PMR	0x4
-#define IT_NR		0x8	// Number of interrupt enable registers (256 total irqs)
-#define GICD_CTRLR	0x0
-#define GICD_IGROUPR	0x80
 #define OSC_FREQ		54000000
 
 #define SCR_RW			BIT(10)
@@ -109,7 +141,7 @@ _start:
 	mov x0, #CPUECTLR_EL1_SMPEN
 	msr CPUECTLR_EL1, x0
 
-/// THIS DOES NOT WORK??? WHYYYYY
+/// NOT USING GIC!!!
 //	bl      setup_gic
 
 	
@@ -189,23 +221,22 @@ kernel_entry32:
 
 .org 0x100
 
-
 setup_gic:				// Called from secure mode - set all interrupts to group 1 and enable.
 	mrs	x0, MPIDR_EL1
-	ldr	x2, =GIC_DISTB
+	ldr	x2, =GICD_BASE
 	tst	x0, #0x3
 	b.eq	2f			// primary core
 
 	mov	w0, #3			// Enable group 0 and 1 IRQs from distributor
 	str	w0, [x2, #GICD_CTRLR]
 2:
-	add	x1, x2, #(GIC_CPUB - GIC_DISTB)
-	mov	w0, #0x1e7
+	add	x1, x2, #(GICC_BASE - GICD_BASE)
+	mov	w0, #3
 	str	w0, [x1, #GICC_CTRLR]	// Enable group 1 IRQs from CPU interface
 	mov	w0, #0xff
 	str	w0, [x1, #GICC_PMR]	// priority mask
 	add	x2, x2, #GICD_IGROUPR
-	mov	x0, #(IT_NR * 4)
+	mov	x0, #(8 * 4)
 	mov	w1, #~0			// group 1 all the things
 3:
 	subs	x0, x0, #4

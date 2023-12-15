@@ -84,3 +84,5 @@ Page descriptors are the only valid L3 descriptors:
 | ----- | ----- | -- | -- | -- | ----- | ----- | -- | -- | --- | --- | - | --- | - | - |
 | Ignored | Reserved | (U)XN | PXN | Contiguous | Reserved | Address | nG | AD | SH | AP | NS | MemAttr | Type | Valid |
 
+## TranslationTable
+`TranslationTable` is a class used for work with translation tables

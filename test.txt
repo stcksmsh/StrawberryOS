@@ -1,3 +1,132 @@
+ELF Header:
+  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00 
+  Class:                             ELF32
+  Data:                              2's complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI Version:                       0
+  Type:                              EXEC (Executable file)
+  Machine:                           Broadcom VideoCore III processor
+  Version:                           0x1
+  Entry point address:               0xcec00200
+  Start of program headers:          52 (bytes into file)
+  Start of section headers:          2252368 (bytes into file)
+  Flags:                             0x100
+  Size of this header:               52 (bytes)
+  Size of program headers:           32 (bytes)
+  Number of program headers:         21
+  Size of section headers:           40 (bytes)
+  Number of section headers:         46
+  Section header string table index: 45
 
-SDCard/start4.elf:     file format elf32-little
+Section Headers:
+  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al
+  [ 0]                   NULL            00000000 000000 000000 00      0   0  0
+  [ 1] .text             PROGBITS        0ec02800 002200 1c9dc4 01  AX  0   0 64
+  [ 2] .init             PROGBITS        0edcc5d0 1cbfd0 000044 01  AX  0   0 16
+  [ 3] .fini             PROGBITS        0edcc620 1cc020 000008 01  AX  0   0 16
+  [ 4] .initdat          PROGBITS        0edcc630 1cc030 000024 01   A  0   0 16
+  [ 5] .rdata            PROGBITS        0edcc680 1cc060 0292b8 01   A  0   0 64
+  [ 6] .rsdata           PROGBITS        0edf5940 1f5320 000f6b 01   A  0   0 16
+  [ 7] .rsdata           PROGBITS        0edf68b0 1f6290 000008 01   A  0   0 16
+  [ 8] .rsdata           PROGBITS        0edf68c0 1f62a0 000008 01   A  0   0 16
+  [ 9] .rsdata           PROGBITS        0edf68d0 1f62b0 000004 01   A  0   0 16
+  [10] .rsdata           PROGBITS        0edf68e0 1f62c0 000008 01   A  0   0 32
+  [11] .rsdata           NOBITS          0edf68f0 1f62d0 000000 01  WA  0   0 16
+  [12] .rsdata           PROGBITS        0edf68f0 1f62d0 000010 01   A  0   0 16
+  [13] .rsdata           PROGBITS        0edf6900 1f62e0 000010 01   A  0   0 16
+  [14] .rsdata           NOBITS          0edf6910 1f62f0 000000 01  WA  0   0 16
+  [15] .rsdata           NOBITS          0edf6910 1f62f0 000000 01  WA  0   0 16
+  [16] .rsdata           PROGBITS        0edf6910 1f62f0 000008 01   A  0   0 16
+  [17] .rsdata           PROGBITS        0edf6920 1f6300 000008 01   A  0   0 16
+  [18] .rsdata           PROGBITS        0edf6930 1f6310 000008 01   A  0   0 16
+  [19] .rsdata           PROGBITS        0edf6940 1f6320 000008 01   A  0   0 16
+  [20] .drivers_base     PROGBITS        0edf6950 1f6330 00000c 01   A  0   0 16
+  [21] .drivers          PROGBITS        0edf6960 1f6340 0000e8 01   A  0   0 16
+  [22] .modules          NOBITS          0edf6a50 1f6430 000000 01  WA  0   0 16
+  [23] .init.vchiq_[...] PROGBITS        0edf6a50 1f6430 000024 01   A  0   0 16
+  [24] .init_mmal_r[...] PROGBITS        0edf6a80 1f6460 000f00 01   A  0   0 16
+  [25] .init.vc_deb[...] PROGBITS        0edf7980 1f7360 0004b0 01   A  0   0 32
+  [26] .text.bootlo[...] PROGBITS        0edf7e30 1f7810 000010 01   A  0   0 16
+  [27] .text.firmwa[...] PROGBITS        0edf7e40 1f7820 000010 01   A  0   0 16
+  [28] .sdata            PROGBITS        0edf7e60 1f7840 001518 01  WA  0   0 32
+  [29] .sbss             NOBITS          0edf9380 1f8d60 0008d0 01  WA  0   0 32
+  [30] .data             PROGBITS        0edf9c60 1f8d60 02ccaf 01  WA  0   0 32
+  [31] .tls              PROGBITS        0ee26920 225a20 00006c 01  WA  0   0 32
+  [32] .guard1           PROGBITS        0ee269a0 225aa0 000100 01  WA  0   0 32
+  [33] .stack            NOBITS          0ee26aa0 225ba0 000800 01  WA  0   0 32
+  [34] .stack2           NOBITS          0ee272a0 225ba0 000800 01  WA  0   0 32
+  [35] .bss              NOBITS          0ee27aa0 225ba0 0f0358 01  WA  0   0 32
+  [36] .heap             NOBITS          0ef17e00 225ba0 000000 01  WA  0   0 32
+  [37] .nuheap           NOBITS          0ef17e00 225ba0 000000 01  WA  0   0 32
+  [38] .guard0           PROGBITS        cec00100 0004e0 000100 01  WA  0   0 32
+  [39] .crypto           PROGBITS        cec00200 0007e0 001960 01  AX  0   0 32
+  [40] .secfns           PROGBITS        cec01b60 002140 0000a8 01   A  0   0  4
+  [41] .isr_vectors      PROGBITS        cec01e00 0005e0 000200 01  WA  0   0  4
+  [42] .init.ucdata      PROGBITS        cec02000 225ba0 000010 01  WA  0   0 32
+  [43] .ucdata           PROGBITS        cec02020 225bc0 0000d8 01  WA  0   0 32
+  [44] .comment          PROGBITS        00000000 225c98 000018 01      0   0  1
+  [45] .shstrtab         STRTAB          00000000 225cb0 00019e 01      0   0  1
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+  L (link order), O (extra OS processing required), G (group), T (TLS),
+  C (compressed), x (unknown), o (OS specific), E (exclude),
+  D (mbind), p (processor specific)
 
+There are no section groups in this file.
+
+Program Headers:
+  Type           Offset   VirtAddr   PhysAddr   FileSiz MemSiz  Flg Align
+  LOAD           0x0004e0 0xcec00100 0xcec00100 0x00100 0x00100 RW  0x20
+  LOAD           0x0005e0 0xcec01e00 0xcec01e00 0x00200 0x00200 RW  0x20
+  LOAD           0x0007e0 0xcec00200 0xcec00200 0x01a08 0x01a08 R E 0x20
+  LOAD           0x002200 0x0ec02800 0x0ec02800 0x1c9e54 0x1c9e54 R E 0x40
+  LOAD           0x1cc060 0x0edcc680 0x0edcc680 0x292b8 0x292b8 R   0x40
+  LOAD           0x1f5320 0x0edf5940 0x0edf5940 0x00f78 0x00f78 R   0x20
+  LOAD           0x1f62a0 0x0edf68c0 0x0edf68c0 0x00014 0x00014 R   0x20
+  LOAD           0x1f62c0 0x0edf68e0 0x0edf68e0 0x00038 0x00038 R   0x20
+  LOAD           0x1f6300 0x0edf6920 0x0edf6920 0x00018 0x00018 R   0x20
+  LOAD           0x1f6320 0x0edf6940 0x0edf6940 0x0001c 0x0001c R   0x20
+  LOAD           0x1f6340 0x0edf6960 0x0edf6960 0x00114 0x00114 R   0x20
+  LOAD           0x1f6460 0x0edf6a80 0x0edf6a80 0x013d0 0x013d0 R   0x20
+  LOAD           0x1f7840 0x0edf7e60 0x0edf7e60 0x01518 0x01518 RW  0x20
+  LOAD           0x1f8d60 0x0edf9380 0x0edf9380 0x00000 0x008d0 RW  0x20
+  LOAD           0x1f8d60 0x0edf9c60 0x0edf9c60 0x2ccaf 0x2ccaf RW  0x20
+  LOAD           0x225a20 0x0ee26920 0x0ee26920 0x0006c 0x0006c RW  0x20
+  LOAD           0x225aa0 0x0ee269a0 0x0ee269a0 0x00100 0x00900 RW  0x20
+  LOAD           0x225ba0 0x0ee272a0 0x0ee272a0 0x00000 0x00800 RW  0x20
+  LOAD           0x225ba0 0x0ee27aa0 0x0ee27aa0 0x00000 0xf0358 RW  0x20
+  LOAD           0x225ba0 0xcec02000 0xcec02000 0x00010 0x00010 RW  0x20
+  LOAD           0x225bc0 0xcec02020 0xcec02020 0x000d8 0x000d8 RW  0x20
+
+ Section to Segment mapping:
+  Segment Sections...
+   00     .guard0 
+   01     .isr_vectors 
+   02     .crypto .secfns 
+   03     .text .init .fini .initdat 
+   04     .rdata 
+   05     .rsdata .rsdata 
+   06     .rsdata .rsdata 
+   07     .rsdata .rsdata .rsdata .rsdata .rsdata .rsdata .rsdata 
+   08     .rsdata .rsdata 
+   09     .rsdata .drivers_base 
+   10     .drivers .modules .init.vchiq_services 
+   11     .init_mmal_ril_parameter_table .init.vc_debug_sym .text.bootloader_state .text.firmware_rev 
+   12     .sdata 
+   13     .sbss 
+   14     .data 
+   15     .tls 
+   16     .guard1 .stack 
+   17     .stack2 
+   18     .bss 
+   19     .init.ucdata 
+   20     .ucdata 
+
+There is no dynamic section in this file.
+
+There are no relocations in this file.
+
+The decoding of unwind sections for machine type Broadcom VideoCore III processor is not currently supported.
+
+No version information found in this file.
