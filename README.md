@@ -6,7 +6,7 @@ StrawberryOS is a project operating system developed for the ARMv8 64-bit archit
 
 ## Installation
 
-Currently there are no releases available, so you would have to clone the source code, and make the image with ``make all``\
+Currently there are no releases available, so you would have to clone the source code, and make the image with ``make all``
 Then the contents of the SDCard folder should be copied to the 'bootfs' partition of the SD card (the SD card should be partitioned as if you installed Raspbian)
 
 ## Features
@@ -24,9 +24,9 @@ I am currently focusing most of my efforts on:
 - the virtual address space and utilizing the MMU
 - interrupt handling and system calls
 
-## Documentation
+## Wiki
 
-I have created several markdown documentation files in the [docs/ folder](./docs/)
+You can find information on the OS [here](https://github.com/stcksmsh/StrawberryOS/wiki)
 
 ## Contributing
 
