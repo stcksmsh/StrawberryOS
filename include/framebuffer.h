@@ -1,11 +1,13 @@
-/*
- *  framebuffer.h	
- *
- *  stcksmsh[github.com] - vukicevickosta@gmail.com
- *
- * 	FrameBuffer class for drawing on screen
+/**
+ * @file framebuffer.h
+ * @author stcksmsh (stcksmsh@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2023-12-16
+ * 
+ * @copyright Copyright (c) 2023
+ * 
  */
-
 #ifndef FRAMEBUFFER_H
 #define FRAMEBUFFER_H
 

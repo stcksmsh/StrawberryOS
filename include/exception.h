@@ -1,9 +1,12 @@
-/*
- *	exception.h
- *
- *  stcksmsh[github.com] - vukicevickosta@gmail.com
- *
- * 	exception codes
+/**
+ * @file exception.h
+ * @author stcksmsh (stcksmsh@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2023-12-16
+ * 
+ * @copyright Copyright (c) 2023
+ * 
  */
 
 #ifndef EXCEPTION_H

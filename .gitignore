@@ -9,4 +9,4 @@ documentation/
 GCC_Cross-Compiler/
 test/
 local.mk
-StrawberryOS.wiki
+wiki

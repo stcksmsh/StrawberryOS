@@ -1,3 +1,13 @@
+/**
+ * @file util.cpp
+ * @author stcksmsh (stcksmsh@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2023-12-16
+ * 
+ * @copyright Copyright (c) 2023
+ * 
+ */
 #include <util.h>
 
 int memcmp(const void *p1, const void *p2, size_t nLength)

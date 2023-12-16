@@ -1,3 +1,13 @@
+/**
+ * @file kernel.cpp
+ * @author stcksmsh (stcksmsh@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2023-12-16
+ * 
+ * @copyright Copyright (c) 2023
+ * 
+ */
 #include "kernel.h"
 #include <miniUart.h>
 #include <framebuffer.h>
@@ -28,17 +38,17 @@ void timerPrint(void *pParam)
 {
     MiniUART *m_miniUART = reinterpret_cast<MiniUART*>(pParam);
     m_miniUART->putChar('T');
-    mmioWrite(ARM_SYSTIMER_C0, mmioRead(ARM_SYSTIMER_CLO) + 1000000);
+    write32(ARM_SYSTIMER_C0, read32(ARM_SYSTIMER_CLO) + 1000000);
     regSet(ARM_SYSTIMER_CS, 1, 1, IRQ_TIMER_0);
 }
 
 void timerInit(){
+    write32(ARM_TIMER_CONTROL, 0);
     MiniUART m_miniUART = MiniUART();
-    uint64_t time = mmioRead(ARM_SYSTIMER_CLO);
+    uint64_t time = read32(ARM_SYSTIMER_CLO);
     m_miniUART.printHex(time);
     m_miniUART.putChar('\n');
-    mmioWrite(ARM_SYSTIMER_C0, mmioRead(ARM_SYSTIMER_CLO) + 1000000);
-    regSet(ARM_SYSTIMER_CS, 1, 1, IRQ_TIMER_0);
+    write32(ARM_SYSTIMER_C0, read32(ARM_SYSTIMER_CLO) + 1000000);
 }
 
 KernelExitCode Kernel::init()
@@ -286,11 +296,12 @@ KernelExitCode Kernel::init()
 
     /// testing timer
     if(timerTest){
-
+        write32(ARM_LOCAL_PMU_CONTROL_CLR, ~0);
+        write32(ARM_LOCAL_TIMER_CNTRL0, 0xF);
         InterruptHandler::RegisterIRQ(IRQ_TIMER_0, timerPrint, &m_miniUART);
         InterruptHandler::EnableIRQ(IRQ_TIMER_0);
+        // timerInit();
         InterruptHandler::EnableIRQs();
-        timerInit();
     }
 
     while (1)m_miniUART.update();

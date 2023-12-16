@@ -6,4 +6,4 @@ core_freq_min=500
 arm_64bit=1
 kernel=kernel8.img
 armstub=armstub8.bin
-enable_gic=1
+enable_gic=0

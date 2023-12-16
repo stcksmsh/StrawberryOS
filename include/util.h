@@ -1,9 +1,12 @@
-/*
- * util.h
- *
- * stcksmsh[github.com] - vukicevickosta@gmail.com
+/**
+ * @file util.h
+ * @author stcksmsh (stcksmsh@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2023-12-16
  * 
- * contains utility functions
+ * @copyright Copyright (c) 2023
+ * 
  */
 
 

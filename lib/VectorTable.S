@@ -1,3 +1,13 @@
+/**
+ * @file VectorTable.S
+ * @author stcksmsh (stcksmsh@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2023-12-16
+ * 
+ * @copyright Copyright (c) 2023
+ * 
+ */
 #include <exception.h>
 #include <bcm2711.h>
 #include "VectorTable-macros.S"

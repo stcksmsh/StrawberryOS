@@ -1,9 +1,12 @@
-/*
- * kernel.h
- *
- * stcksmsh[github.com] - vukicevickosta@gmail.com
+/**
+ * @file kernel.h
+ * @author stcksmsh (stcksmsh@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2023-12-16
  * 
- * Kernel class, the main class of the kernel
+ * @copyright Copyright (c) 2023
+ * 
  */
 
 

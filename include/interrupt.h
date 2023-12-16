@@ -1,11 +1,13 @@
-/*
- *  interrupt.h
- *
- * stcksmsh[github.com] - vukicevickosta@gmail.com
+/**
+ * @file interrupt.h
+ * @author stcksmsh (stcksmsh@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2023-12-16
  * 
- * IRQ definitions
+ * @copyright Copyright (c) 2023
+ * 
  */
-
 #ifndef INTERRUPT_H
 #define INTERRUPT_H
 

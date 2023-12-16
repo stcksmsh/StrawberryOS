@@ -1,9 +1,12 @@
-/*
- * mmio.h
- *
- * stcksmsh[github.com] - vukicevickosta@gmail.com
+/**
+ * @file mmio.h
+ * @author stcksmsh (stcksmsh@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2023-12-16
  * 
- * contains functions for reading and writing to MMIO registers
+ * @copyright Copyright (c) 2023
+ * 
  */
 
 #ifndef MMIO_H
@@ -14,14 +17,14 @@
 /// @brief writes to the MMIO register
 /// @param aReg the address of the register
 /// @param val the value to write
-inline void mmioWrite(uint64_t reg, uint32_t val){
+inline void write32(uint64_t reg, uint32_t val){
     *(volatile uint32_t*)reg = val;
 }
 
 /// @brief reads from the MMIO register
 /// @param aReg the address of the register
 /// @return its current value
-inline uint32_t mmioRead(uint64_t reg){
+inline uint32_t read32(uint64_t reg){
     return *(volatile uint32_t*)reg;
 }
 /// @brief sets the value mask to the maskShift-th group of maskLen bits, example to set the 6,7,8 bits of X to 0b100 call setMask(X, 0b100, 3, 3)
@@ -43,9 +46,9 @@ inline uint32_t setMask(uint32_t value, uint32_t mask, int maskLen, int maskShif
 /// @param iValueIndex index of value
 /// @return 
 inline void regSet(uint64_t reg, uint32_t value, int valueLen, int valueIndex){
-    uint32_t regVal = mmioRead(reg);
+    uint32_t regVal = read32(reg);
     regVal = setMask(regVal, value, valueLen, valueIndex);
-    mmioWrite(reg, regVal);
+    write32(reg, regVal);
 }
 #endif  // MMIO_H
 

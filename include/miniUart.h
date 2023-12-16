@@ -1,9 +1,12 @@
-/*
- * miniUart.h
- *
- * stcksmsh[github.com] - vukicevickosta@gmail.com
+/**
+ * @file miniUart.h
+ * @author stcksmsh (stcksmsh@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2023-12-16
  * 
- * MiniUART class serves as a stream for communicating through the miniUART
+ * @copyright Copyright (c) 2023
+ * 
  */
 
 #ifndef MiniUART_H
@@ -33,6 +36,8 @@ public:
 
     /// print a 64bit unsigned int in hex to miniUART
     void printHex(uint64_t);
+
+    void printHex(uint32_t);
 
     /// print CString to miniUART and add a newline
     void println(char*);

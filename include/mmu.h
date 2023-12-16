@@ -1,11 +1,12 @@
-/*
- *  mmu.h
- *
- *  stcksmsh[github.com] - vukicevickosta@gmail.com
- *
- *  Declaratons meant to be used with granule size 4KB and 48 bit OA
- *  
- *  Information used gathered from: Arm Architecture Reference Manual Armv8, for Armv8-A architecture profile, D8, D8.3 Translation Table Descriptor formats, page 5852
+/**
+ * @file mmu.h
+ * @author stcksmsh (stcksmsh@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2023-12-16
+ * 
+ * @copyright Copyright (c) 2023
+ * 
  */
 
 #ifndef MMU_H

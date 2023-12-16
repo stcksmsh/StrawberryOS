@@ -1,10 +1,12 @@
-/*
- * memorymap.h
- *
- * stcksmsh[github.com] - vukicevickosta@gmail.com
+/**
+ * @file memorymap.h
+ * @author stcksmsh (stcksmsh@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2023-12-16
  * 
- * Contains definitions for the memory map of the system
- * DO NOT INCLUDE THIS FILE DIRECTLY, INCLUDE IT THROUGH sysconfig.h !!!
+ * @copyright Copyright (c) 2023
+ * 
  */
 
 

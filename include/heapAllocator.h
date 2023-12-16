@@ -1,11 +1,13 @@
-/*
- *	heapAllocator.h
- *
- *  stcksmsh[github.com] - vukicevickosta@gmail.com
- *
- * 	Heap allocator class
+/**
+ * @file heapAllocator.h
+ * @author stcksmsh (stcksmsh@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2023-12-16
+ * 
+ * @copyright Copyright (c) 2023
+ * 
  */
-
 #ifndef heapAllocator_H
 #define heapAllocator_H
 

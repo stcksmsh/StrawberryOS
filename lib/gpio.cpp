@@ -1,3 +1,13 @@
+/**
+ * @file gpio.cpp
+ * @author stcksmsh (stcksmsh@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2023-12-16
+ * 
+ * @copyright Copyright (c) 2023
+ * 
+ */
 #include <gpio.h>
 
 void pinSet(uint8_t pin){
@@ -18,7 +28,7 @@ int pinRead(uint8_t pin){
     uint64_t reg = 0;
     if(pin <= 31) reg = ARM_GPIO_GPLEV0;
     else reg = ARM_GPIO_GPLEV1;
-    uint32_t val = mmioRead(reg);
+    uint32_t val = read32(reg);
     val = setMask(val, 0b1, 1, pin%32);
     return val;
 }

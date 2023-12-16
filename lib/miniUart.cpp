@@ -1,3 +1,13 @@
+/**
+ * @file miniUart.cpp
+ * @author stcksmsh (stcksmsh@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2023-12-16
+ * 
+ * @copyright Copyright (c) 2023
+ * 
+ */
 #include <miniUart.h>
 
 #define MiniUART_MAX_QUEUE 16384 /// 16 * 1024
@@ -13,33 +23,33 @@ uint32_t MiniUART_output_queue_read = 0;
 
 void MiniUART::init(){
     /// enables the MiniUART
-    mmioWrite(ARM_AUX_ENABLES, 1);
+    write32(ARM_AUX_ENABLES, 1);
     /// disable interrupts
-    mmioWrite(ARM_AUX_MU_IER_REG, 0);
+    write32(ARM_AUX_MU_IER_REG, 0);
     /// disable everything until set up
-    mmioWrite(ARM_AUX_MU_CNTL_REG, 0);
+    write32(ARM_AUX_MU_CNTL_REG, 0);
     /// set MiniUART to 8bit mode
-    mmioWrite(ARM_AUX_MU_LCR_REG, 3);
+    write32(ARM_AUX_MU_LCR_REG, 3);
     /// set MiniUART_1RTS to high
-    mmioWrite(ARM_AUX_MU_MCR_REG, 0);
+    write32(ARM_AUX_MU_MCR_REG, 0);
     /// disable interrupts again???
-    mmioWrite(ARM_AUX_MU_IER_REG, 0);
+    write32(ARM_AUX_MU_IER_REG, 0);
     /// 6 is to clear receive and transmit FIFO, C enables FIFOs
-    mmioWrite(ARM_AUX_MU_IIR_REG, 0xC6);
+    write32(ARM_AUX_MU_IIR_REG, 0xC6);
     /// set baud rate
-    mmioWrite(ARM_AUX_MU_BAUD_REG, AUX_MU_BAUD(115200));
+    write32(ARM_AUX_MU_BAUD_REG, AUX_MU_BAUD(115200));
     /// set pins 14 and 15 to ALT5, RX and TX
     pinPull(14, DOWN);
     pinMode(14, ALT5);
     pinPull(15, DOWN);
     pinMode(15, ALT5);
     // enable receiver and transmiter
-    mmioWrite(ARM_AUX_MU_CNTL_REG, 3);    
+    write32(ARM_AUX_MU_CNTL_REG, 3);    
 }
 
 void MiniUART::putChar(char ch){
     while(!isWriteByteReady());
-    mmioWrite(ARM_AUX_MU_IO_REG, (uint32_t)ch);
+    write32(ARM_AUX_MU_IO_REG, (uint32_t)ch);
     if(ch == '\n')putChar('\r');
 }
 
@@ -103,6 +113,30 @@ void MiniUART::printHex(uint64_t n){
     }
 }
 
+void MiniUART::printHex(uint32_t n){
+    for(int i = 7; i >= 0; i--){
+        int val = (n >> (i * 4)) & 0xF;
+        switch(val){
+            case 0: putChar('0'); break;
+            case 1: putChar('1'); break;
+            case 2: putChar('2'); break;
+            case 3: putChar('3'); break;
+            case 4: putChar('4'); break;
+            case 5: putChar('5'); break;
+            case 6: putChar('6'); break;
+            case 7: putChar('7'); break;
+            case 8: putChar('8'); break;
+            case 9: putChar('9'); break;
+            case 10: putChar('A'); break;
+            case 11: putChar('B'); break;
+            case 12: putChar('C'); break;
+            case 13: putChar('D'); break;
+            case 14: putChar('E'); break;
+            case 15: putChar('F'); break;
+        }
+    }
+}
+
 
 void MiniUART::println(char* buff){
     print(buff);
@@ -111,7 +145,7 @@ void MiniUART::println(char* buff){
 
 char MiniUART::readChar() {
     while (!isReadByteReady());
-    return (char)mmioRead(ARM_AUX_MU_IO_REG);
+    return (char)read32(ARM_AUX_MU_IO_REG);
 }
 
 // char* MiniUART::readLine(char delim = '\n') {
@@ -144,12 +178,12 @@ void MiniUART::loadOutputQueue(){
 }
 
 uint32_t MiniUART::isReadByteReady()  {
-    return mmioRead(ARM_AUX_MU_LSR_REG) & 0x01;
+    return read32(ARM_AUX_MU_LSR_REG) & 0x01;
 }
 
 uint32_t MiniUART::isWriteByteReady(){
     /// we read the 5th bit of ARM_AUX_MU_LSR_REG
-    return mmioRead(ARM_AUX_MU_LSR_REG) & 0x20;
+    return read32(ARM_AUX_MU_LSR_REG) & 0x20;
 }
 
 uint32_t MiniUART::isOutputQueueEmpty() {

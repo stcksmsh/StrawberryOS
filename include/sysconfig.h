@@ -1,9 +1,12 @@
-/*
- * sysconfig.h
- *
- * stcksmsh[github.com] - vukicevickosta@gmail.com
+/**
+ * @file sysconfig.h
+ * @author stcksmsh (stcksmsh@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2023-12-16
  * 
- * contains system configuration macros
+ * @copyright Copyright (c) 2023
+ * 
  */
 
 #ifndef SYSCONFIG_H

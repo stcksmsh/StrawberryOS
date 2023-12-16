@@ -1,3 +1,14 @@
+/**
+ * @file boot.S
+ * @author stcksmsh (stcksmsh@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2023-12-16
+ * 
+ * @copyright Copyright (c) 2023
+ * 
+ */
+
 #include <sysconfig.h>
 
 /* Taken from U-Boot, defined in arch/arm/include/asm/macro.h */

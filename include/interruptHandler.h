@@ -1,9 +1,12 @@
-/*
- *  interruptHandler.h
- *  
- *  stcksmsh[github.com] - vukicevickosta@gmail.com
+/**
+ * @file interruptHandler.h
+ * @author stcksmsh (stcksmsh@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2023-12-16
  * 
- * InterruptHandler class for IRQ handling
+ * @copyright Copyright (c) 2023
+ * 
  */
 
 #ifndef INTERRUPT_HANDLER_H

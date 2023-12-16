@@ -1,9 +1,12 @@
-/*
- *  machineinfo.h
- *
- * stcksmsh[github.com] - vukicevickosta@gmail.com
+/**
+ * @file machineinfo.h
+ * @author stcksmsh (stcksmsh@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2023-12-16
  * 
- *  MachineInfo class for getting information on the host machine
+ * @copyright Copyright (c) 2023
+ * 
  */
 
 #ifndef MACHINEINFO_H

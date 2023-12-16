@@ -1,11 +1,13 @@
-/*
- * mailbox.h
- *
- * stcksmsh[github.com] - vukicevickosta@gmail.com
+/**
+ * @file mailbox.h
+ * @author stcksmsh (stcksmsh@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2023-12-16
  * 
- * Mailbox class for communicating with the VideoCore
+ * @copyright Copyright (c) 2023
+ * 
  */
-
 #ifndef MBOX_H
 #define MBOX_H
 

@@ -1,9 +1,12 @@
-/*
- * types.h
- *
- * stcksmsh[github.com] - vukicevickosta@gmail.com
+/**
+ * @file types.h
+ * @author stcksmsh (stcksmsh@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2023-12-16
  * 
- * should be used instead of stdint.h
+ * @copyright Copyright (c) 2023
+ * 
  */
 
 #ifndef TYPES_H

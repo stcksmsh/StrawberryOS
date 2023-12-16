@@ -1,11 +1,13 @@
-/*
- * memoryManager.h
- *
- * stcksmsh[github.com] - vukicevickosta@gmail.com
+/**
+ * @file memoryManager.h
+ * @author stcksmsh (stcksmsh@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2023-12-16
  * 
- * Memory Manager class for managing all system memory
+ * @copyright Copyright (c) 2023
+ * 
  */
-
 #ifndef MEMORY_MANAGER_H
 #define MEMORY_MANAGER_H
 

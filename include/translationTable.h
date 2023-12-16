@@ -1,9 +1,12 @@
-/*
- *  translationTable.h
- *
- *  stcksmsh[github.com] - vukicevickosta@gmail.com
+/**
+ * @file translationTable.h
+ * @author stcksmsh (stcksmsh@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2023-12-16
  * 
- * Translation Table class for managing the translation table
+ * @copyright Copyright (c) 2023
+ * 
  */
 
 #ifndef TRANSLATION_TABLE_H

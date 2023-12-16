@@ -1,9 +1,12 @@
-/*
- *  assert.h
+/**
+ * @file assert.h
+ * @author Kosta Vukicevic (vukicevickosta@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2023-12-16
  * 
- *  stcksmsh[github.com] - vukicevickosta@gmail.com
- *
- *  assert macro for checking conditions at runtime
+ * @copyright Copyright (c) 2023
+ * 
  */
 
 #ifndef ASSERT_H

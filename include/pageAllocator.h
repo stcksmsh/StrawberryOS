@@ -1,9 +1,12 @@
-/*
- * pageAllocator.h
- *
- * stcksmsh[github.com] - vukicevickosta@gmail.com
+/**
+ * @file pageAllocator.h
+ * @author stcksmsh (stcksmsh@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2023-12-16
  * 
- * PageAllocator class for allocating pages
+ * @copyright Copyright (c) 2023
+ * 
  */
 
 #ifndef PAGE_ALLOCATOR_H
