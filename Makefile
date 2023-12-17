@@ -1,31 +1,28 @@
-BUILD_DIR = ./build
-BOOT_DIR = ./boot
-BOOT_DIR = ./boot
-HEADER_DIR = ./include
+BUILD_DIR = build
+INIT_DIR = init
+LIB_DIR = lib
+INCLUDE_DIR = include
+KERNEL_DIR = kernel
+ARMSTUB_DIR = armstub
+MM_DIR = mm
 
-# naming the image kernel8 signals RPi4 to boot into 64_bit mode
-# this could be done through config.txt, but this is easier
-KERNEL = kernel8
+KERNEL = ${BUILD_DIR}/strawberry
 KERNEL_ELF = ${KERNEL}.elf
 KERNEL_LST = ${KERNEL}.lst
 KERNEL_IMG = ${KERNEL}.img
 KERNEL_READELF = ${KERNEL}.readelf
 
-ARMSTUB = boot/armstub/armstub8
+ARMSTUB = ${ARMSTUB_DIR}/armstub8
+ARMSTUB_SRC = ${ARMSTUB}.S
+ARMSTUB_OBJ = ${BUILD_DIR}/${ARMSTUB}.o
 ARMSTUB_ELF = ${ARMSTUB}.elf
-ARMSTUB_BIN = ${ARMSTUB}.bin
 ARMSTUB_LST = ${ARMSTUB}.lst
-ARMSTUB_S = ${ARMSTUB}.S
-ARMSTUB_OBJ = ${ARMSTUB}.o
+ARMSTUB_BIN = ${ARMSTUB}.bin
 
-
-# the prefix for all the build tools
 PREFIX = /usr/local/cross
 TOOL_PREFIX = ${PREFIX}/bin/aarch64-elf-
 
-# the build tools themselves
 CC = ${TOOL_PREFIX}gcc
-AS = ${CC}
 AS = ${CC}
 CXX = ${TOOL_PREFIX}g++
 LD = ${TOOL_PREFIX}ld
@@ -38,7 +35,7 @@ GCCFLAGS =  -Wall -Werror -O2 -nostdlib -c
 GCCFLAGS += -ffreestanding -nostartfiles
 GCCFLAGS += -ggdb -fno-common -mgeneral-regs-only
 GCCFLAGS += -mtune=cortex-a72 -fstack-protector
-GCCFLAGS += -isystem include
+GCCFLAGS += -isystem include -isystem arch/asm/include
 
 # # C flags
 # GCCFLAGS =  -Wall -Werror -O2 -nostdlib -c
@@ -55,43 +52,56 @@ CXXFLAGS += -nostdinc++
 ASFLAGS = ${GCCFLAGS}
 
 # linker script and linker flags
-LDSCRIPT = boot/linker.ld
+LDSCRIPT = $(INIT_DIR)/linker.ld
 LDFLAGS = -nostdlib -T ${LDSCRIPT}  -O2
 # LDFLAGS = -T ${LDSCRIPT} -ffreestanding -O2 -nostdlib  -lgcc
 
 CRT_PREFIX = ${PREFIX}/lib/gcc/aarch64-elf/13.2.0
 CRTI = ${CRT_PREFIX}/crti.o
-CRTBEGIN = ${CRT_PREFIX}/crtbegin.o
-CRTEND = ${CRT_PREFIX}/crtend.o
 CRTN = ${CRT_PREFIX}/crtn.o
 
 LINK_LIST = ${CRTI} ${OBJ_FILES} ${CRTN}
 
-
 # make the image
-all: clean ${KERNEL_IMG} ${ARMSTUB_BIN}
-	@echo "Image created successfully!"
+all: clean kernel armstub
+	@echo "Successfully built kernel and armstub!"
+
+archlink: 
+	@rm -f arch/asm
+	@if [ -n "${ARCH}" ]; then \
+		echo "Linking arch/asm to arch/${ARCH}/"; \
+		realpath arch/${ARCH} | xargs -I{} ln -s {} arch/asm; \
+		else \
+		echo "Error: ARCH is empty, defaulting to 'arm64'"; \
+		realpath arch/arm64 | xargs -I{} ln -s {} arch/asm; \
+	fi
+#default target exists for testing purposes
+
+kernel: archlink ${KERNEL_IMG}
+	@echo "Kernel created successfully!"
+
+armstub: ${ARMSTUB_BIN}
+	@echo "ARMStub created successfully!"
+
 # remove .img, .elf and all object files
 clean:
-	@echo "Cleaning..."
-	@rm -f ${KERNEL_IMG} ${KERNEL_ELF} ${KERNEL_LST} ${KERNEL_READELF}
-	@rm -f ${ARMSTUB_ELF} ${ARMSTUB_BIN} ${ARMSTUB_LST} ${ARMSTUB_OBJ}
+	@echo "Cleaning..."find ${KERNEL_DIR} ${LIB_DIR} -name "*.S"
 	@rm -fr ${BUILD_DIR}
 
 # make all cpp object files
-${BUILD_DIR}/%.o: %.cpp makefile | ${BUILD_DIR}
+${BUILD_DIR}/%.o: %.cpp Makefile | ${BUILD_DIR}
 	@mkdir -p $(dir ${@})
 	@echo "CXX ${<}..."
 	@${CXX} $(CXXFLAGS) -MMD -o ${@} ${<}
 
 # make all c object files
-${BUILD_DIR}/%.o: m%.c makefile | ${BUILD_DIR}
+${BUILD_DIR}/%.o: m%.c Makefile | ${BUILD_DIR}
 	@mkdir -p $(dir ${@})
 	@echo "CC ${<}..."
 	@${CC} $(GCCFLAGS) -MMD -o ${@} ${<}
 
 # make all asm object files
-${BUILD_DIR}/%.o: %.S makefile | ${BUILD_DIR}
+${BUILD_DIR}/%.o: %.S Makefile | ${BUILD_DIR}
 	@mkdir -p $(dir ${@})
 	@echo "AS ${<}..."
 	@${AS} $(ASFLAGS) -MMD -o ${@} ${<} 
@@ -104,16 +114,18 @@ ${BUILD_DIR}:
 # initialised as empty
 OBJ_FILES = 
 
+SOURCE_DIRS := ${KERNEL_DIR} ${LIB_DIR} ${MM_DIR} ${INIT_DIR}
+
 # get all sources, then add their obj files to OBJ_FILES, then vpath
-SOURCES_ASM = $(wildcard kernel/*.S lib/*.S) # find all *.S files
+SOURCES_ASM = $(shell find ${SOURCE_DIRS} -name "*.S") # find all *.S files
 OBJ_FILES += ${addprefix ${BUILD_DIR}/,${SOURCES_ASM:.S=.o}} # add %.o for each %.S file to OBJ_FILES
 vpath %.S ${sort ${dir ${SOURCES_ASM}}} # if .S is missing, look for it in all subdirectories in SOURCES_ASM, sorted lexicographically
 
-SOURCES_C = $(wildcard kernel/*.c lib/*.c)
+SOURCES_C = $(shell find ${SOURCE_DIRS} -name "*.c") # find all *.S files
 OBJ_FILES += ${addprefix ${BUILD_DIR}/,${SOURCES_C:.c=.o}}
 vpath %.c ${sort ${dir ${SOURCES_C}}}
 
-SOURCES_CPP = $(wildcard kernel/*.cpp lib/*.cpp)
+SOURCES_CPP = $(shell find ${SOURCE_DIRS} -name "*.cpp") # find all *.S files
 OBJ_FILES += ${addprefix ${BUILD_DIR}/,${SOURCES_CPP:.cpp=.o}}
 vpath %.cpp ${sort ${dir ${SOURCES_CPP}}}
 
@@ -121,16 +133,9 @@ vpath %.cpp ${sort ${dir ${SOURCES_CPP}}}
 DEP_FILES = $(OBJ_FILES:%.o=%.d)
 -include $(DEP_FILES)
 
-${ARMSTUB_BIN}: ${ARMSTUB_S}
-	@echo "AS ${ARMSTUB_S}..."
-	@${AS} ${ASFLAGS} -c ${ARMSTUB_S} -o ${ARMSTUB_OBJ}
-	@${LD} --section-start=.text=0 -o ${ARMSTUB_ELF} ${ARMSTUB_OBJ}
-	@${OBJDUMP} -D ${ARMSTUB_ELF} > ${ARMSTUB_LST}
-	@${OBJCOPY} ${ARMSTUB_ELF} -O binary ${ARMSTUB_BIN}
-
 # link all obj to the .elf file with the linker script
 # then copy the objects to the .img file, as the .elf is not for the right architecture
-${KERNEL_ELF}: ${OBJ_FILES} ${LDSCRIPT} | ${BUILD_DIR}
+${KERNEL_ELF}: ${OBJ_FILES} ${LDSCRIPT}
 	@echo "LD ${<}..."
 	@${LD} ${LDFLAGS} -o ${KERNEL_ELF} ${LINK_LIST}
 	@${OBJDUMP} -D ${KERNEL_ELF} > ${KERNEL_LST}
@@ -145,10 +150,25 @@ readelf: ${KERNEL_ELF}
  
 SDCard: all
 	@echo "Copying to directory SDCard..."
-	@cp boot/config.txt ./SDCard
 	@cp ${ARMSTUB_BIN} ./SDCard
-	@cp kernel8.img ./SDCard
+	@cp ${KERNEL_IMG} ./SDCard
 	@echo "Done! You can now copy the contents of SDCard to your SD Card's bootfs partition."
 
+
+${ARMSTUB_BIN}: ${ARMSTUB_ELF}
+	@echo "OBJCOPY ${<}..."
+	@${OBJCOPY} ${ARMSTUB_ELF} -O binary ${ARMSTUB_BIN}
+
+${ARMSTUB_ELF}: ${ARMSTUB_OBJ}
+	@echo "LD ${<}..."
+	@${LD} -o ${ARMSTUB_ELF} ${ARMSTUB_OBJ}
+	@${OBJDUMP} -D ${ARMSTUB_ELF} > ${ARMSTUB_LST}
+
+${ARMSTUB_OBJ}: ${ARMSTUB_SRC} | ${BUILD_DIR}/${ARMSTUB_DIR}
+	@echo "AS ${<}..."
+	${CC} ${GCCFLAGS} -o ${ARMSTUB_OBJ} ${ARMSTUB_SRC}
+
+${BUILD_DIR}/${ARMSTUB_DIR}: ${BUILD_DIR}
+	@mkdir -p ${@}
 
 include local.mk

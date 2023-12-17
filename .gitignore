@@ -3,10 +3,7 @@ build/
 *.lst
 *.elf
 *.img
-test/
 .vscode
-documentation/
-GCC_Cross-Compiler/
-test/
+docfiles
 local.mk
-wiki
+Documentation
