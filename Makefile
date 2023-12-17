@@ -52,7 +52,7 @@ CXXFLAGS += -nostdinc++
 ASFLAGS = ${GCCFLAGS}
 
 # linker script and linker flags
-LDSCRIPT = $(INIT_DIR)/linker.ld
+LDSCRIPT = linker.ld
 LDFLAGS = -nostdlib -T ${LDSCRIPT}  -O2
 # LDFLAGS = -T ${LDSCRIPT} -ffreestanding -O2 -nostdlib  -lgcc
 
@@ -66,13 +66,16 @@ LINK_LIST = ${CRTI} ${OBJ_FILES} ${CRTN}
 all: clean kernel armstub
 	@echo "Successfully built kernel and armstub!"
 
+help:
+	@echo "Building: 'ARCH=(arch) make... ' where (arch) is one the desired architecture, if not provided, defaults to arm64"
+
 archlink: 
 	@rm -f arch/asm
 	@if [ -n "${ARCH}" ]; then \
 		echo "Linking arch/asm to arch/${ARCH}/"; \
 		realpath arch/${ARCH} | xargs -I{} ln -s {} arch/asm; \
 		else \
-		echo "Error: ARCH is empty, defaulting to 'arm64'"; \
+		echo "ARCH is empty, defaulting to 'arm64', if this was not intended, please run 'make help'"; \
 		realpath arch/arm64 | xargs -I{} ln -s {} arch/asm; \
 	fi
 #default target exists for testing purposes
@@ -136,7 +139,7 @@ DEP_FILES = $(OBJ_FILES:%.o=%.d)
 # link all obj to the .elf file with the linker script
 # then copy the objects to the .img file, as the .elf is not for the right architecture
 ${KERNEL_ELF}: ${OBJ_FILES} ${LDSCRIPT}
-	@echo "LD ${<}..."
+	@echo "LD ${@}..."
 	@${LD} ${LDFLAGS} -o ${KERNEL_ELF} ${LINK_LIST}
 	@${OBJDUMP} -D ${KERNEL_ELF} > ${KERNEL_LST}
 
@@ -160,15 +163,17 @@ ${ARMSTUB_BIN}: ${ARMSTUB_ELF}
 	@${OBJCOPY} ${ARMSTUB_ELF} -O binary ${ARMSTUB_BIN}
 
 ${ARMSTUB_ELF}: ${ARMSTUB_OBJ}
-	@echo "LD ${<}..."
+	@echo "LD ${@}..."
 	@${LD} -o ${ARMSTUB_ELF} ${ARMSTUB_OBJ}
 	@${OBJDUMP} -D ${ARMSTUB_ELF} > ${ARMSTUB_LST}
 
 ${ARMSTUB_OBJ}: ${ARMSTUB_SRC} | ${BUILD_DIR}/${ARMSTUB_DIR}
 	@echo "AS ${<}..."
-	${CC} ${GCCFLAGS} -o ${ARMSTUB_OBJ} ${ARMSTUB_SRC}
+	@${CC} ${GCCFLAGS} -o ${ARMSTUB_OBJ} ${ARMSTUB_SRC}
 
 ${BUILD_DIR}/${ARMSTUB_DIR}: ${BUILD_DIR}
 	@mkdir -p ${@}
 
 include local.mk
+
+.PHONY: all clean kernel armstub archlink SDCard readelf
