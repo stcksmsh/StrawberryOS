@@ -1,7 +1,7 @@
 /**
  * @file kernel.h
  * @author stcksmsh (stcksmsh@gmail.com)
- * @brief 
+ * @brief the main class of the Kernel
  * @version 0.1
  * @date 2023-12-16
  * 

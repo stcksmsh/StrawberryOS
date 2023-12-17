@@ -1,7 +1,7 @@
 /**
  * @file sysconfig.h
  * @author stcksmsh (stcksmsh@gmail.com)
- * @brief 
+ * @brief some system configuration constants
  * @version 0.1
  * @date 2023-12-16
  * 

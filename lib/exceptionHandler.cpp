@@ -1,7 +1,7 @@
 /**
  * @file exceptionHandler.cpp
  * @author stcksmsh (stcksmsh@gmail.com)
- * @brief 
+ * @brief implementation of the ExceptionHandler class, used for exception handling
  * @version 0.1
  * @date 2023-12-16
  * 

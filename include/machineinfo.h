@@ -1,7 +1,7 @@
 /**
  * @file machineinfo.h
  * @author stcksmsh (stcksmsh@gmail.com)
- * @brief 
+ * @brief class used to get machine info from the GPU using the mailbox interface
  * @version 0.1
  * @date 2023-12-16
  * 

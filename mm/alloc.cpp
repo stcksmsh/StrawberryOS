@@ -1,7 +1,7 @@
 /**
  * @file alloc.cpp
  * @author stcksmsh (stcksmsh@gmail.com)
- * @brief 
+ * @brief some simple memory allocation functions, will be removed in the future
  * @version 0.1
  * @date 2023-12-16
  * 

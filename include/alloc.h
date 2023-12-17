@@ -1,7 +1,7 @@
 /**
  * @file alloc.h
  * @author stcksmsh (stcksmsh@gmail.com)
- * @brief 
+ * @brief simple memory management, only temporary
  * @version 0.1
  * @date 2023-12-16
  * 

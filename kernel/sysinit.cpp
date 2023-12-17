@@ -1,7 +1,7 @@
 /**
  * @file sysinit.cpp
  * @author stcksmsh (stcksmsh@gmail.com)
- * @brief 
+ * @brief used to initialize the system, runs between the bootloader(boot.S) and the kernel
  * @version 0.1
  * @date 2023-12-16
  * 

@@ -1,7 +1,7 @@
 /**
  * @file memoryManager.cpp
  * @author stcksmsh (stcksmsh@gmail.com)
- * @brief 
+ * @brief implementation of the MemoryManager class, the main memory management class in the kernel
  * @version 0.1
  * @date 2023-12-16
  * 

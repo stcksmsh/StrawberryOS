@@ -1,7 +1,7 @@
 /**
  * @file VectorTable-macros.S
  * @author stcksmsh (stcksmsh@gmail.com)
- * @brief 
+ * @brief macros used in VectorTable.S
  * @version 0.1
  * @date 2023-12-16
  * 

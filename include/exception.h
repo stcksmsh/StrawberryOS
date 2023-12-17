@@ -1,7 +1,7 @@
 /**
  * @file exception.h
  * @author stcksmsh (stcksmsh@gmail.com)
- * @brief 
+ * @brief defines some exception types
  * @version 0.1
  * @date 2023-12-16
  * 

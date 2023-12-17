@@ -1,7 +1,7 @@
 /**
  * @file machineinfo.cpp
  * @author stcksmsh (stcksmsh@gmail.com)
- * @brief 
+ * @brief implementation of MachineInfo class, used for gathering information about the machine through the mailbox interface
  * @version 0.1
  * @date 2023-12-16
  * 

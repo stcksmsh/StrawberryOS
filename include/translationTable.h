@@ -1,7 +1,7 @@
 /**
  * @file translationTable.h
  * @author stcksmsh (stcksmsh@gmail.com)
- * @brief 
+ * @brief class which encapsulates the translation table
  * @version 0.1
  * @date 2023-12-16
  * 

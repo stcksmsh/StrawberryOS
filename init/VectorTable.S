@@ -1,7 +1,7 @@
 /**
  * @file VectorTable.S
  * @author stcksmsh (stcksmsh@gmail.com)
- * @brief 
+ * @brief the vector table
  * @version 0.1
  * @date 2023-12-16
  * 

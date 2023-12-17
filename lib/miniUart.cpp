@@ -1,7 +1,7 @@
 /**
  * @file miniUart.cpp
  * @author stcksmsh (stcksmsh@gmail.com)
- * @brief 
+ * @brief implementation of MiniUART class, used for serial communication
  * @version 0.1
  * @date 2023-12-16
  * 

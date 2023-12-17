@@ -1,7 +1,7 @@
 /**
  * @file types.h
  * @author stcksmsh (stcksmsh@gmail.com)
- * @brief 
+ * @brief used instead of stdint.h
  * @version 0.1
  * @date 2023-12-16
  * 

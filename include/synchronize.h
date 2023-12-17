@@ -1,7 +1,7 @@
 /**
  * @file synchronize.h
  * @author stcksmsh (stcksmsh@gmail.com)
- * @brief 
+ * @brief not yet implemented
  * @version 0.1
  * @date 2023-12-16
  * 

@@ -1,7 +1,7 @@
 /**
  * @file util.h
  * @author stcksmsh (stcksmsh@gmail.com)
- * @brief 
+ * @brief memory utility functions
  * @version 0.1
  * @date 2023-12-16
  * 

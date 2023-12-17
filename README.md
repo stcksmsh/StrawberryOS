@@ -39,6 +39,6 @@ to discuss what you would like to change.
 
 [MIT][License-link]
 
-[Line-badge]: https://img.shields.io/badge/Lines-4.55k-f89820?style=for-the-badge
+[Line-badge]: https://img.shields.io/badge/Lines-4.53k-f89820?style=for-the-badge
 [License-badge]: https://img.shields.io/badge/License-MIT-04a635?style=for-the-badge
 [License-link]: https://opensource.org/licenses/MIT

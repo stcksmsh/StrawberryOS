@@ -1,7 +1,7 @@
 /**
  * @file mmu.h
  * @author stcksmsh (stcksmsh@gmail.com)
- * @brief 
+ * @brief has MMU table entry structs and definitions
  * @version 0.1
  * @date 2023-12-16
  * 

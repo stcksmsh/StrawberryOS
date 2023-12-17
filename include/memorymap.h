@@ -1,7 +1,7 @@
 /**
  * @file memorymap.h
  * @author stcksmsh (stcksmsh@gmail.com)
- * @brief 
+ * @brief contains memory map constants
  * @version 0.1
  * @date 2023-12-16
  * 

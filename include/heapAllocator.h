@@ -1,7 +1,7 @@
 /**
  * @file heapAllocator.h
  * @author stcksmsh (stcksmsh@gmail.com)
- * @brief 
+ * @brief class for heap management, used in MemoryManager
  * @version 0.1
  * @date 2023-12-16
  * 

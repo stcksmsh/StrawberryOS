@@ -1,7 +1,7 @@
 /**
  * @file boot.S
  * @author stcksmsh (stcksmsh@gmail.com)
- * @brief 
+ * @brief first thing to run after the armstub, sets up the system and switches to EL1 then jumps to the kernel
  * @version 0.1
  * @date 2023-12-16
  * 

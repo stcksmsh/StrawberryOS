@@ -1,7 +1,7 @@
 /**
  * @file mailbox.h
  * @author stcksmsh (stcksmsh@gmail.com)
- * @brief 
+ * @brief class used to communicate with the mailbox
  * @version 0.1
  * @date 2023-12-16
  * 

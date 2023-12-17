@@ -1,7 +1,7 @@
 /**
  * @file assert.cpp
  * @author stcksmsh (stcksmsh@gmail.com)
- * @brief 
+ * @brief implementation of the __assert_failed method
  * @version 0.1
  * @date 2023-12-16
  * 

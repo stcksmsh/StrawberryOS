@@ -1,7 +1,7 @@
 /**
  * @file heapAllocator.cpp
  * @author stcksmsh (stcksmsh@gmail.com)
- * @brief 
+ * @brief implementation of the HeapAllocator class
  * @version 0.1
  * @date 2023-12-16
  * 

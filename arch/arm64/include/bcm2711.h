@@ -1,7 +1,7 @@
 /**
  * @file bcm2711.h
  * @author stcksmsh (stcksmsh@gmail.com)
- * @brief 
+ * @brief register address constants for BCM2711
  * @version 0.1
  * @date 2023-12-16
  * 
