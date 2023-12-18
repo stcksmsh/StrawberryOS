@@ -13,7 +13,7 @@
 #include <util.h>
 #include <miniUart.h>
 
-void sysinit(){
+extern "C" void sysinit(){
     // __asm__ volatile (" cpsie i"); // Enable IRQs 
     // asm volatile ("cpsie f"); // Enable FIQs
     

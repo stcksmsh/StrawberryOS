@@ -36,8 +36,9 @@ public:
 
     /// print a 64bit unsigned int in hex to miniUART
     void printHex(uint64_t);
-
     void printHex(uint32_t);
+    void printHex(uint16_t);
+
 
     /// print CString to miniUART and add a newline
     void println(char*);

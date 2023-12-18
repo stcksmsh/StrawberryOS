@@ -17,8 +17,15 @@
 #include <assert.h>
 #include <bcm2711.h>
 #include <interrupt.h>
+#include <thread.h>
 
 Kernel *Kernel::m_pInstance = 0;
+
+void test(void* args){
+    MiniUART m_miniUART;
+    m_miniUART << (char*)"Hello from thread";
+    m_miniUART.putChar('\n');
+}
 
 Kernel::Kernel():
     m_memoryManager(false), /// DONT USE MMU FOR NOW, IT'S NOT WORKING
@@ -51,6 +58,12 @@ void timerInit(){
     write32(ARM_SYSTIMER_C0, read32(ARM_SYSTIMER_CLO) + 1000000);
 }
 
+uint64_t getPC(){
+    uint64_t lr;
+    __asm__ volatile("mov %0, lr" : "=r" (lr));
+    return lr;
+}
+
 KernelExitCode Kernel::init()
 {
     int machineInfoOut = MachineInfo::getInfo();
@@ -59,11 +72,12 @@ KernelExitCode Kernel::init()
         return ShutdownHalt;
     }
 
-    bool intro = true;
+    bool intro = false;
     bool heapTest = false;
     bool memTestHeap = false;
-    bool sysCallTest = true;
-    bool timerTest = true;
+    bool sysCallTest = false;
+    bool timerTest = false;
+    bool threadClassTest = true;
     /// block containing init messages:
     /// ASCII art, machine info and device power states
     if(intro){
@@ -303,6 +317,56 @@ KernelExitCode Kernel::init()
         // timerInit();
         InterruptHandler::EnableIRQs();
     }
+
+    if(threadClassTest){
+        uint64_t spsel;
+        __asm__ volatile("mrs %0, spsel" : "=r" (spsel));
+        m_miniUART << (char*)"SPSEL: ";
+        m_miniUART.printHex(spsel);
+        m_miniUART.putChar('\n');
+
+        Thread t(true, true, true);
+        uint64_t pc = getPC();
+        Thread tt(test, &m_miniUART);
+        m_miniUART << (char*)"Threads created\n";
+        m_miniUART << (char*)"Thread pid: ";
+        m_miniUART.printHex(t.pid);
+        m_miniUART.putChar('\n');
+        m_miniUART << (char*)"Thread state: ";
+        uint16_t *p = (uint16_t*)&t.state;
+        m_miniUART.printHex(*p);
+        m_miniUART.putChar('\n');
+        m_miniUART << (char*)"Thread context: ";
+        m_miniUART.putChar('\n');
+        m_miniUART << (char*)"  sp: ";
+        m_miniUART.printHex(t.context.sp);
+        m_miniUART.putChar('\n');
+        m_miniUART << (char*)"  lr: ";
+        m_miniUART.printHex(t.context.lr);
+        m_miniUART.putChar('\n');
+        m_miniUART << (char*)"      ";
+        m_miniUART.printHex(pc);
+        m_miniUART.putChar('\n');
+        m_miniUART << (char*)"  daif: ";
+        m_miniUART.printHex(t.context.daif);
+        m_miniUART.putChar('\n');
+        m_miniUART << (char*)"  nzcv: ";
+        m_miniUART.printHex(t.context.nzcv);
+        m_miniUART.putChar('\n');
+        t.context_save();
+        m_miniUART << (char*)"New lr: ";
+        m_miniUART.printHex(t.context.lr);
+        m_miniUART.putChar('\n');
+        tt.context.lr = reinterpret_cast<uint64_t>(Thread::funWrapper);
+        m_miniUART << (char*)"Test thread lr: ";
+        m_miniUART.printHex(tt.context.lr);
+        m_miniUART.putChar('\n');
+        m_miniUART << (char*)"Tests done";
+        m_miniUART.putChar('\n');
+        Thread::current_thread = &tt;
+        tt.context_load();
+    }
+    __asm__ volatile("wfi");
 
     while (1)m_miniUART.update();
     return ShutdownNone;

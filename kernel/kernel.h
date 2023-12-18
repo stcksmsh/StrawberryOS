@@ -45,6 +45,7 @@ private:
 
     friend class ExceptionHandler;
     friend class InterruptHandler;
+    friend class Thread;
 };
 
 #endif  // KERNEL_H

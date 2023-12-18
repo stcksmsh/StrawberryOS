@@ -38,7 +38,7 @@ ExceptionHandler::~ExceptionHandler()
 {
     m_pInstance = 0;
 }
-__attribute__((optimize(0)))
+NOOPT
 void ExceptionHandler::Throw(uint64_t nException, TAbortFrame *pFrame)
 {
     if(nException == EXCEPTION_SYNCHRONOUS && pFrame->esr_el1.ec == SVC64_EXCEPTION){ /// SVC from arch64

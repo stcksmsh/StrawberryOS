@@ -85,4 +85,4 @@ _start:
 		ldr	x0, =VectorTable	/* init EL1 exception vector table */
 		msr	vbar_el1, x0
 
-		b	_Z7sysinitv
+		b	sysinit

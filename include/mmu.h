@@ -13,6 +13,7 @@
 #define MMU_H
 
 #include <types.h>
+#include <cdefs.h>
 
 
 #define MMU_GRANULE_SIZE		0x1000		// 4KB
@@ -32,7 +33,7 @@ struct L0_TABLE_DESCRIPTOR{
                                     // bit 0 controlls access in unprivileged mode (EL0), and if byte 1 is unset, then write is enabled in unprivileged mode
                                     // if bit 0 is unset, then there is no read or write access in unprivileged mode
                 NSTable     :1;     // next table is Non-Secure, always 0 for now
-}__attribute__((packed));
+}PACKED;
 
 // level 1
 struct L1_TABLE_DESCRIPTOR{
@@ -48,7 +49,7 @@ struct L1_TABLE_DESCRIPTOR{
                                     // bit 0 controlls access in unprivileged mode (EL0), and if byte 1 is unset, then write is enabled in unprivileged mode
                                     // if bit 0 is unset, then there is no read or write access in unprivileged mode
                 NSTable     :1;     // next table is Non-Secure, always 0 for now
-}__attribute__((packed));
+}PACKED;
 
 /// 1 GB block
 struct L1_BLOCK_DESCRIPTOR{
@@ -73,18 +74,18 @@ struct L1_BLOCK_DESCRIPTOR{
                 Ignored     :4,     // set to 0
                 PBHA        :4,     // Page Based Hardware Attributes, set to 0
                 Reserved2   :1;
-}__attribute__((packed));
+}PACKED;
 
 struct L1_INVALID_DESCRIPTOR{
     uint64_t    Valid       :1,     // set to 0b1
                 Ignored     :63;    // set to 0
-}__attribute__((packed));
+}PACKED;
 
 union L1_DESCRIPTOR{
     struct L1_TABLE_DESCRIPTOR     Table;
     struct L1_BLOCK_DESCRIPTOR     Block;
     struct L1_INVALID_DESCRIPTOR   Invalid;
-}__attribute__((packed));
+}PACKED;
 
 // level 2
 struct L2_TABLE_DESCRIPTOR{
@@ -95,7 +96,7 @@ struct L2_TABLE_DESCRIPTOR{
                 Reserved0   :3,     // set to 0
                 Ignored2    :8,     // set to 0
                 Reserved1   :5;     // No attributes for L2
-}__attribute__((packed));
+}PACKED;
 
 /// 2 MB block
 struct L2_BLOCK_DESCRIPTOR{
@@ -119,18 +120,18 @@ struct L2_BLOCK_DESCRIPTOR{
                 Ignored     :3,     // set to 0
                 PBHA        :4,     // Page Based Hardware Attributes, set to 0
                 Reserved2   :1;     // set to 0
-}__attribute__((packed));
+}PACKED;
 
 struct L2_INVALID_DESCRIPTOR{
     uint64_t    Valid       :1,     // set to 0b1
                 Ignored     :63;    // set to 0
-}__attribute__((packed));
+}PACKED;
 
 union L2_DESCRIPTOR{
     struct L2_TABLE_DESCRIPTOR     Table;
     struct L2_BLOCK_DESCRIPTOR     Block;
     struct L2_INVALID_DESCRIPTOR   Invalid;
-}__attribute__((packed));
+}PACKED;
 
 
 // level 3
@@ -153,17 +154,17 @@ struct L3_PAGE_DESCRIPTOR{
                 UXN         :1,     // Unprivileged eXecute Never, should be 0 where the memory region is executable in unprivileged mode (EL0)
                 Reserved2   :4,     // set to 0
                 Ignored     :5;     // set to 0
-}__attribute__((packed));
+}PACKED;
 
 struct L3_INVALID_DESCRIPTOR{
     uint64_t    Valid       :1,     // set to 0b1
                 Ignored     :63;    // set to 0
-}__attribute__((packed));
+}PACKED;
 
 union L3_DESCRIPTOR{
     struct L3_PAGE_DESCRIPTOR     Page;
     struct L3_INVALID_DESCRIPTOR   Invalid;
-}__attribute__((packed));
+}PACKED;
 
 
 
@@ -258,7 +259,7 @@ struct TCR_ELn{
                 TCMA1:  1,
                 DS:     1,
                 Res2:   4;
-}__attribute__((packed));
+}PACKED;
 
 union mmu_tcr{
     TCR_ELn tcr_eln;

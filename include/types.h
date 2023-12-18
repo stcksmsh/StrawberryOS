@@ -15,5 +15,6 @@
 #include <stdint.h>
 
 typedef uint64_t size_t;
+typedef uint32_t pid_t;
 
 #endif

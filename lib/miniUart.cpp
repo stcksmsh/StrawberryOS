@@ -137,6 +137,31 @@ void MiniUART::printHex(uint32_t n){
     }
 }
 
+void MiniUART::printHex(uint16_t n){
+    for(int i = 3; i >= 0; i--){
+        int val = (n >> (i * 4)) & 0xF;
+        switch(val){
+            case 0: putChar('0'); break;
+            case 1: putChar('1'); break;
+            case 2: putChar('2'); break;
+            case 3: putChar('3'); break;
+            case 4: putChar('4'); break;
+            case 5: putChar('5'); break;
+            case 6: putChar('6'); break;
+            case 7: putChar('7'); break;
+            case 8: putChar('8'); break;
+            case 9: putChar('9'); break;
+            case 10: putChar('A'); break;
+            case 11: putChar('B'); break;
+            case 12: putChar('C'); break;
+            case 13: putChar('D'); break;
+            case 14: putChar('E'); break;
+            case 15: putChar('F'); break;
+        }
+    }
+
+}
+
 
 void MiniUART::println(char* buff){
     print(buff);
